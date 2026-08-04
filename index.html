@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A1 Sweets — Crafted for Celebration | Ulhasnagar</title>
+<meta name="description" content="A1 Sweets, Ulhasnagar — since 1965. Signature mithai, festive gifting, handcrafted daily.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7F1;
+    --bg-deep:#F2ECDF;
+    --ink:#171512;
+    --gray:#726C60;
+    --gray-dim:#C4BBA9;
+    --gold:#B8863E;
+    --gold-bright:#D8A857;
+    --copper:#A85D34;
+    --line: rgba(23,21,18,0.1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:auto;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:'Fraunces',serif;font-weight:400;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:400;line-height:1.05;letter-spacing:-0.01em;}
+  em{font-style:italic;color:var(--gold);}
+  .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:2px;text-transform:uppercase;font-size:0.7rem;}
+  a{color:inherit;text-decoration:none;}
+  img,video{max-width:100%;display:block;}
+  section{position:relative;}
+
+  /* ===== LOADER ===== */
+  #loader{
+    position:fixed;inset:0;z-index:9999;
+    background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity 1s ease, visibility 1s ease;
+  }
+  #loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  #loader canvas{position:absolute;inset:0;}
+  #loader .loader-text{position:relative;z-index:2;color:var(--gold-bright);font-family:'Fraunces',serif;font-size:1.4rem;letter-spacing:2px;}
+
+  /* ===== NAV ===== */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 5vw;
+    background:rgba(250,247,241,0.0);
+    backdrop-filter:blur(0px);
+    transition:background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
+    border-bottom:1px solid transparent;
+  }
+  nav.scrolled{
+    background:rgba(250,247,241,0.72);
+    backdrop-filter:blur(18px) saturate(160%);
+    border-bottom-color:var(--line);
+  }
+  .brand{font-family:'Fraunces',serif;font-size:1.15rem;letter-spacing:0.5px;color:var(--ink);}
+  nav.on-dark .brand, nav.on-dark .nav-links a{color:#F5F0E4;}
+  .nav-links{display:flex;gap:32px;font-size:0.78rem;}
+  .nav-links a{opacity:0.75;transition:opacity .2s;color:var(--ink);}
+  .nav-links a:hover{opacity:1;}
+  .nav-cta{
+    border:1px solid var(--gold);
+    padding:9px 20px;border-radius:100px;
+    font-size:0.76rem;
+    color:var(--ink);
+    transition:background .25s ease, color .25s ease;
+  }
+  nav.on-dark .nav-cta{color:#F5F0E4;border-color:var(--gold-bright);}
+  .nav-cta:hover{background:var(--gold);color:#fff;}
+  @media(max-width:860px){.nav-links{display:none;}}
+
+  /* ===== VIDEO SECTION BASE ===== */
+  .video-section{
+    min-height:100svh;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .bg-video-wrap{
+    position:absolute;inset:0;z-index:0;overflow:hidden;
+  }
+  .bg-video-wrap video{
+    width:100%;height:100%;object-fit:cover;
+    position:absolute;inset:0;
+  }
+  .bg-video-wrap .overlay{
+    position:absolute;inset:0;
+  }
+  .overlay-dark{background:linear-gradient(180deg, rgba(10,8,6,0.55), rgba(10,8,6,0.35) 40%, rgba(10,8,6,0.65));}
+  .overlay-light{background:linear-gradient(180deg, rgba(250,247,241,0.15), rgba(250,247,241,0.55) 70%, rgba(250,247,241,0.85));}
+
+  /* ===== HERO ===== */
+  .hero{color:#F5F0E4;text-align:center;}
+  #hero-particles{position:absolute;inset:0;z-index:1;pointer-events:none;}
+  .hero-inner{position:relative;z-index:2;padding-top:40px;}
+  .hero .mono{color:var(--gold-bright);margin-bottom:20px;}
+  .hero h1{font-size:clamp(3.2rem, 9vw, 8rem);}
+  .hero p{margin-top:24px;font-size:1.1rem;font-weight:300;opacity:0.88;max-width:480px;margin-left:auto;margin-right:auto;}
+  .hero-ctas{margin-top:40px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .btn{padding:15px 32px;font-size:0.82rem;border-radius:100px;font-weight:500;letter-spacing:0.3px;transition:transform .3s ease, background .3s ease, opacity .3s ease;}
+  .btn-primary{background:#F5F0E4;color:var(--ink);}
+  .btn-primary:hover{transform:scale(1.045);}
+  .btn-outline{border:1px solid rgba(245,240,228,0.5);color:#F5F0E4;}
+  .btn-outline:hover{background:rgba(245,240,228,0.12);}
+  .scroll-cue{
+    position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;
+    font-size:0.62rem;color:rgba(245,240,228,0.6);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .scroll-cue::after{content:"";width:1px;height:36px;background:linear-gradient(rgba(245,240,228,0.6), transparent);}
+
+  /* ===== STORY ===== */
+  .story{padding:180px 6vw;background:var(--bg);}
+  .story-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:80px;align-items:center;}
+  @media(max-width:900px){.story-grid{grid-template-columns:1fr;gap:50px;}}
+  .story-media{aspect-ratio:4/5;overflow:hidden;border-radius:2px;position:relative;clip-path:inset(0 0 0 0);}
+  .story-media img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);}
+  .story-text .mono{color:var(--gold);margin-bottom:22px;}
+  .story-text h2{font-size:clamp(2.2rem,4.5vw,3.6rem);margin-bottom:28px;}
+  .story-text p{font-size:1.02rem;font-weight:300;line-height:1.85;color:var(--gray);margin-bottom:20px;max-width:480px;}
+  .story-timeline{margin-top:44px;display:flex;gap:0;border-top:1px solid var(--line);padding-top:26px;}
+  .tl-item{flex:1;padding-right:18px;}
+  .tl-item b{font-family:'Fraunces',serif;color:var(--gold);font-size:1.05rem;display:block;margin-bottom:6px;}
+  .tl-item span{font-size:0.76rem;color:var(--gray);line-height:1.5;display:block;}
+
+  /* ===== SIGNATURE (full bleed video) ===== */
+  .signature{color:#F5F0E4;text-align:center;}
+  .signature .mono{color:var(--gold-bright);margin-bottom:22px;}
+  .signature h2{font-size:clamp(3rem,8vw,6.5rem);position:relative;z-index:2;}
+  .signature p{margin-top:22px;font-size:1.05rem;font-weight:300;max-width:460px;margin-left:auto;margin-right:auto;opacity:0.85;position:relative;z-index:2;}
+  .signature-inner{position:relative;z-index:2;padding:0 6vw;}
+
+  /* ===== COLLECTION ===== */
+  .collection{padding:0;background:var(--bg);}
+  .collection-banner{height:56vh;position:relative;display:flex;align-items:flex-end;padding:0 6vw 60px;color:#F5F0E4;}
+  .collection-banner .mono{color:var(--gold-bright);margin-bottom:14px;position:relative;z-index:2;}
+  .collection-banner h2{font-size:clamp(2.4rem,6vw,4.6rem);position:relative;z-index:2;}
+  .collection-cards{
+    padding:90px 6vw 140px;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:26px;
+  }
+  @media(max-width:900px){.collection-cards{grid-template-columns:1fr;}}
+  .glass-card{
+    background:rgba(255,255,255,0.5);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:38px 30px;
+    backdrop-filter:blur(10px);
+    transition:transform .1s ease-out, box-shadow .3s ease;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .glass-card:hover{box-shadow:0 30px 60px rgba(23,21,18,0.12);}
+  .glass-card .icon-dot{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold-bright),var(--copper));margin-bottom:30px;}
+  .glass-card h3{font-size:1.4rem;margin-bottom:10px;}
+  .glass-card p{font-size:0.88rem;color:var(--gray);font-weight:300;line-height:1.6;}
+
+  /* ===== CRAFT ===== */
+  .craft{color:#F5F0E4;padding-top:160px;padding-bottom:160px;}
+  .craft-inner{position:relative;z-index:2;padding:0 6vw;text-align:center;}
+  .craft .mono{color:var(--gold-bright);margin-bottom:20px;}
+  .craft h2{font-size:clamp(2.4rem,6vw,4.6rem);max-width:800px;margin:0 auto;}
+  .craft-timeline{
+    margin-top:90px;
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:2px;background:rgba(245,240,228,0.15);
+    max-width:1000px;margin-left:auto;margin-right:auto;
+  }
+  @media(max-width:768px){.craft-timeline{grid-template-columns:1fr 1fr;}}
+  .craft-step{background:rgba(10,8,6,0.35);padding:36px 22px;text-align:left;}
+  .craft-step .num{font-family:'IBM Plex Mono';font-size:0.7rem;color:var(--gold-bright);}
+  .craft-step h4{font-family:'Fraunces';font-size:1.15rem;margin-top:18px;font-weight:400;}
+  .craft-step p{font-size:0.78rem;opacity:0.7;margin-top:8px;font-weight:300;line-height:1.5;}
+
+  /* ===== GIFTING ===== */
+  .gifting{color:#F5F0E4;padding-top:160px;padding-bottom:160px;text-align:center;}
+  .gifting-inner{position:relative;z-index:2;padding:0 6vw;}
+  .gifting .mono{color:var(--gold-bright);margin-bottom:20px;}
+  .gifting h2{font-size:clamp(2.4rem,6vw,4.4rem);margin-bottom:60px;}
+  .gift-cards{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;max-width:1000px;margin:0 auto;}
+  .gift-card{
+    flex:1;min-width:230px;max-width:300px;
+    background:rgba(245,240,228,0.08);
+    border:1px solid rgba(245,240,228,0.22);
+    border-radius:16px;padding:34px 26px;
+    text-align:left;
+    transition:background .3s ease, transform .3s ease;
+  }
+  .gift-card:hover{background:rgba(245,240,228,0.15);transform:translateY(-6px);}
+  .gift-card h3{font-size:1.25rem;margin-bottom:10px;font-weight:400;}
+  .gift-card p{font-size:0.82rem;opacity:0.75;font-weight:300;line-height:1.55;}
+  .gifting .hero-ctas{margin-top:56px;}
+
+  /* ===== VISIT ===== */
+  .visit{padding:150px 6vw;background:var(--bg-deep);}
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;}
+  @media(max-width:900px){.visit-grid{grid-template-columns:1fr;}}
+  .visit .mono{color:var(--gold);margin-bottom:20px;}
+  .visit h2{font-size:clamp(2.2rem,4.5vw,3.4rem);margin-bottom:36px;}
+  .info-line{display:flex;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line);font-size:0.9rem;}
+  .info-line span:first-child{color:var(--gray);font-size:0.74rem;}
+  .info-line span:last-child{text-align:right;font-weight:500;}
+  .map-frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;aspect-ratio:4/3;}
+  .map-frame iframe{width:100%;height:100%;border:0;filter:grayscale(0.25) contrast(0.95) brightness(1.02);}
+
+  /* ===== FINALE ===== */
+  .finale{color:#F5F0E4;text-align:center;min-height:100svh;}
+  #finale-particles{position:absolute;inset:0;z-index:1;pointer-events:none;}
+  .finale-inner{position:relative;z-index:2;}
+  .finale .brand-mark{font-family:'Fraunces';font-size:clamp(2.4rem,6vw,4rem);letter-spacing:1px;}
+  .finale .mono{color:var(--gold-bright);margin-top:18px;margin-bottom:10px;}
+  .finale p.tagline{margin-top:14px;font-size:1.1rem;font-weight:300;opacity:0.85;max-width:420px;margin-left:auto;margin-right:auto;}
+  .finale .hero-ctas{margin-top:44px;justify-content:center;}
+
+  footer{
+    background:var(--ink);color:rgba(245,240,228,0.6);
+    padding:50px 6vw 30px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
+    font-size:0.75rem;
+  }
+  footer .f-brand{font-family:'Fraunces';color:#F5F0E4;font-size:1rem;margin-bottom:10px;}
+  footer .f-col a{display:block;margin-bottom:8px;opacity:0.75;transition:opacity .2s;}
+  footer .f-col a:hover{opacity:1;}
+  footer .f-bottom{width:100%;border-top:1px solid rgba(245,240,228,0.12);margin-top:30px;padding-top:20px;font-size:0.68rem;opacity:0.5;}
+
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity 1s ease, transform 1s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{transition:none;opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <canvas id="loader-canvas"></canvas>
+  <div class="loader-text">A1 SWEETS</div>
+</div>
+
+<nav id="nav" class="on-dark">
+  <div class="brand">A1 Sweets</div>
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#story">Story</a>
+    <a href="#signature">Signature</a>
+    <a href="#collection">Collection</a>
+    <a href="#gifting">Gifting</a>
+    <a href="#visit">Visit</a>
+  </div>
+  <a class="nav-cta" href="https://wa.me/919881217775" target="_blank">Order</a>
+</nav>
+
+<!-- HERO -->
+<section class="video-section hero" id="home">
+  <div class="bg-video-wrap">
+    <video autoplay muted loop playsinline poster="posters/poster-1.jpg">
+      <source src="videos/video-1.mp4" type="video/mp4">
+    </video>
+    <div class="overlay overlay-dark"></div>
+  </div>
+  <canvas id="hero-particles"></canvas>
+  <div class="hero-inner">
+    <div class="mono">Ulhasnagar · Est. 1965</div>
+    <h1>A1 <em>Sweets</em></h1>
+    <p>Crafted for celebration. Sixty years of mithai, made the way memory demands.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#collection">Explore Collection</a>
+      <a class="btn btn-outline" href="https://wa.me/919881217775" target="_blank">Order Now</a>
+    </div>
+  </div>
+  <div class="scroll-cue mono">Scroll</div>
+</section>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="story-grid">
+    <div class="story-media reveal">
+      <img src="posters/poster-1.jpg" alt="A1 Sweets signature platter">
+    </div>
+    <div class="story-text reveal">
+      <div class="mono">Our Story</div>
+      <h2>Ek snack corner se,<br>ek legacy tak.</h2>
+      <p>1965 mein Madhavdas Kanayalal Jaisinghani ne Shivaji Chowk pe ek chhoti si dukaan shuru ki. Dheere-dheere Ulhasnagar ke swaad ne mithai ki taraf rukh kiya — aur 1988 tak A1 poori tarah ek sweet house ban chuka tha.</p>
+      <p>Aaj teesri peedhi isse aage badha rahi hai — wahi recipe, wahi ghee, wahi bharosa jo shuru se raha hai.</p>
+      <div class="story-timeline">
+        <div class="tl-item"><b>1965</b><span>Founded at Shivaji Chowk</span></div>
+        <div class="tl-item"><b>1988</b><span>Full transition to mithai</span></div>
+        <div class="tl-item"><b>Today</b><span>3rd generation, 5,000+ customers</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE PRODUCT -->
+<section class="video-section signature" id="signature">
+  <div class="bg-video-wrap">
+    <video autoplay muted loop playsinline poster="posters/poster-2.jpg">
+      <source src="videos/video-2.mp4" type="video/mp4">
+    </video>
+    <div class="overlay overlay-dark"></div>
+  </div>
+  <div class="signature-inner">
+    <div class="mono reveal">Signature Creation</div>
+    <h2 class="reveal">Mawa-Sev Barfi</h2>
+    <p class="reveal">Ek hi recipe, saath dahaakon se. Hand-layered, pure ghee mein banaya gaya — humara sabse zyada pyaar kiya gaya mithai.</p>
+  </div>
+</section>
+
+<!-- COLLECTION -->
+<section class="collection" id="collection">
+  <div class="collection-banner video-section" style="min-height:auto;">
+    <div class="bg-video-wrap">
+      <video autoplay muted loop playsinline poster="posters/poster-3.jpg">
+        <source src="videos/video-3.mp4" type="video/mp4">
+      </video>
+      <div class="overlay overlay-dark"></div>
+    </div>
+    <div style="position:relative;z-index:2;">
+      <div class="mono">Premium Collection</div>
+      <h2>Har mithai, ek craft.</h2>
+    </div>
+  </div>
+  <div class="collection-cards">
+    <div class="glass-card reveal" data-tilt>
+      <div class="icon-dot"></div>
+      <h3>Kaju Katli</h3>
+      <p>Silver-vark finished cashew barfi — festive gifting, perfected.</p>
+    </div>
+    <div class="glass-card reveal" data-tilt>
+      <div class="icon-dot" style="background:linear-gradient(135deg,#D8A857,#726C60);"></div>
+      <h3>Anjeer Delight</h3>
+      <p>Dried fig and dry-fruit special. Melt-in-mouth premium sweet.</p>
+    </div>
+    <div class="glass-card reveal" data-tilt>
+      <div class="icon-dot" style="background:linear-gradient(135deg,#A85D34,#D8A857);"></div>
+      <h3>Rasmalai & Rasgulla</h3>
+      <p>Soft chenna sweets in sugar syrup, garnished with pistachio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CRAFTSMANSHIP -->
+<section class="video-section craft" id="craft" style="min-height:auto;">
+  <div class="bg-video-wrap">
+    <video autoplay muted loop playsinline poster="posters/poster-4.jpg">
+      <source src="videos/video-4.mp4" type="video/mp4">
+    </video>
+    <div class="overlay overlay-dark"></div>
+  </div>
+  <div class="craft-inner">
+    <div class="mono reveal">Craftsmanship</div>
+    <h2 class="reveal">Zero shortcuts.<br>Every single day.</h2>
+    <div class="craft-timeline reveal">
+      <div class="craft-step"><div class="num mono">01</div><h4>Pure Ghee</h4><p>No substitutes, ever.</p></div>
+      <div class="craft-step"><div class="num mono">02</div><h4>Handpicked Dry Fruits</h4><p>Selected fresh, daily.</p></div>
+      <div class="craft-step"><div class="num mono">03</div><h4>Traditional Recipe</h4><p>Unchanged since 1965.</p></div>
+      <div class="craft-step"><div class="num mono">04</div><h4>Made Fresh Daily</h4><p>Nothing sits overnight.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GIFTING -->
+<section class="video-section gifting" id="gifting" style="min-height:auto;">
+  <div class="bg-video-wrap">
+    <video autoplay muted loop playsinline poster="posters/poster-5.jpg">
+      <source src="videos/video-5.mp4" type="video/mp4">
+    </video>
+    <div class="overlay overlay-dark"></div>
+  </div>
+  <div class="gifting-inner">
+    <div class="mono reveal">Gifting</div>
+    <h2 class="reveal">Mithai bhejiye,<br>rishte meethe kijiye.</h2>
+    <div class="gift-cards reveal">
+      <div class="gift-card"><h3>Wedding Hampers</h3><p>Custom boxes for shaadi season, made to order.</p></div>
+      <div class="gift-card"><h3>Festival Boxes</h3><p>Diwali, Rakhi & festive gifting collections.</p></div>
+      <div class="gift-card"><h3>Corporate Gifting</h3><p>Bulk orders with a personal, premium touch.</p></div>
+    </div>
+    <div class="hero-ctas reveal">
+      <a class="btn btn-primary" href="https://wa.me/919881217775" target="_blank">Enquire on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section class="visit" id="visit">
+  <div class="visit-grid">
+    <div class="reveal">
+      <div class="mono">Visit Us</div>
+      <h2>Aaj hi mithai<br>chakhne aayiye.</h2>
+      <div class="info-line"><span>Address</span><span>Shop 718/719, Kalyan-Ambernath Rd,<br>Near Shivaji Chowk, Ulhasnagar 3</span></div>
+      <div class="info-line"><span>Phone</span><span>+91 98812 17775</span></div>
+      <div class="info-line"><span>Hours</span><span>Daily · 10 AM – 10 PM</span></div>
+      <div class="info-line"><span>Rating</span><span>4.4★ · 5,200+ reviews</span></div>
+      <div class="hero-ctas" style="margin-top:34px;">
+        <a class="btn" style="background:var(--ink);color:#F5F0E4;" href="https://wa.me/919881217775" target="_blank">WhatsApp Order</a>
+        <a class="btn" style="border:1px solid var(--line);" href="https://www.google.com/maps/place/?q=place_id:ChIJJ5w2LxWU5zsRBWfB-OZJGVU" target="_blank">Directions</a>
+      </div>
+    </div>
+    <div class="map-frame reveal">
+      <iframe src="https://www.google.com/maps?q=A-1+Sweets+Ulhasnagar&output=embed" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FINALE -->
+<section class="video-section finale" id="order">
+  <div class="bg-video-wrap">
+    <video autoplay muted loop playsinline poster="posters/poster-6.jpg">
+      <source src="videos/video-6.mp4" type="video/mp4">
+    </video>
+    <div class="overlay overlay-dark"></div>
+  </div>
+  <canvas id="finale-particles"></canvas>
+  <div class="finale-inner">
+    <div class="brand-mark">A1 SWEETS</div>
+    <div class="mono">Since 1965 · Ulhasnagar</div>
+    <p class="tagline">Har khushi ke pal ko meetha banaiye.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="https://wa.me/919881217775" target="_blank">Order on WhatsApp</a>
+      <a class="btn btn-outline" href="tel:+919881217775">Call Now</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-col">
+    <div class="f-brand">A1 Sweets</div>
+    <span style="opacity:0.6;">Since 1965 · Ulhasnagar No. 3</span>
+  </div>
+  <div class="f-col">
+    <a href="https://wa.me/919881217775" target="_blank">WhatsApp</a>
+    <a href="tel:+919881217775">Call Us</a>
+    <a href="https://www.google.com/maps/place/?q=place_id:ChIJJ5w2LxWU5zsRBWfB-OZJGVU" target="_blank">Google Maps</a>
+  </div>
+  <div class="f-col">
+    <a href="#story">Our Story</a>
+    <a href="#collection">Collection</a>
+    <a href="#gifting">Gifting</a>
+  </div>
+  <div class="f-bottom">© A1 Sweets, Ulhasnagar. Shop 718/719, Kalyan-Ambernath Road, Ulhasnagar No. 3.</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+  // ---------- Lenis smooth scroll ----------
+  let lenis;
+  try{
+    lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    lenis.on('scroll', ()=>{ if(window.ScrollTrigger) ScrollTrigger.update(); });
+    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }catch(e){ console.warn('Lenis not available, using native scroll'); }
+
+  // ---------- Loader ----------
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>{
+      document.getElementById('loader').classList.add('hidden');
+    }, 900);
+  });
+
+  // loader golden particles
+  (function(){
+    const canvas = document.getElementById('loader-canvas');
+    if(!window.THREE) return;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 50);
+    camera.position.z = 10;
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+    const geo = new THREE.BufferGeometry();
+    const count = 250;
+    const positions = new Float32Array(count*3);
+    for(let i=0;i<count;i++){
+      positions[i*3] = (Math.random()-0.5)*16;
+      positions[i*3+1] = (Math.random()-0.5)*10;
+      positions[i*3+2] = (Math.random()-0.5)*8;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    const mat = new THREE.PointsMaterial({color:0xD8A857, size:0.05, transparent:true, opacity:0.85});
+    const points = new THREE.Points(geo, mat);
+    scene.add(points);
+
+    let raf1;
+    function animate(){
+      points.rotation.y += 0.0012;
+      renderer.render(scene, camera);
+      raf1 = requestAnimationFrame(animate);
+    }
+    animate();
+    setTimeout(()=>cancelAnimationFrame(raf1), 2200);
+  })();
+
+  // ---------- Nav scroll state ----------
+  const navEl = document.getElementById('nav');
+  const darkSections = ['home','signature','craft','gifting','order'];
+  function updateNav(){
+    navEl.classList.toggle('scrolled', window.scrollY > 60);
+    let onDark = false;
+    darkSections.forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      const r = el.getBoundingClientRect();
+      if(r.top < 80 && r.bottom > 80) onDark = true;
+    });
+    navEl.classList.toggle('on-dark', onDark);
+  }
+  window.addEventListener('scroll', updateNav);
+  updateNav();
+
+  // ---------- Reveal on scroll ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // ---------- GSAP scroll animations ----------
+  if(window.gsap && window.ScrollTrigger){
+    gsap.registerPlugin(ScrollTrigger);
+
+    // story image reveal (clip-path mask)
+    gsap.fromTo('.story-media img',
+      {scale:1.25},
+      {scale:1, ease:'none', scrollTrigger:{trigger:'.story-media', start:'top bottom', end:'bottom top', scrub:1}}
+    );
+
+    // parallax on all bg videos
+    document.querySelectorAll('.bg-video-wrap video').forEach(vid=>{
+      gsap.fromTo(vid, {yPercent:-8}, {
+        yPercent:8, ease:'none',
+        scrollTrigger:{trigger: vid.closest('section'), start:'top bottom', end:'bottom top', scrub:1}
+      });
+    });
+
+    // signature huge type scale-in
+    gsap.fromTo('#signature h2', {scale:0.85, opacity:0.6}, {
+      scale:1, opacity:1, ease:'power2.out',
+      scrollTrigger:{trigger:'#signature', start:'top 70%', end:'top 20%', scrub:1}
+    });
+
+    // craft timeline stagger
+    gsap.fromTo('.craft-step', {y:40, opacity:0}, {
+      y:0, opacity:1, stagger:0.12, duration:0.8, ease:'power2.out',
+      scrollTrigger:{trigger:'.craft-timeline', start:'top 85%'}
+    });
+  }
+
+  // ---------- 3D tilt on collection glass cards ----------
+  document.querySelectorAll('[data-tilt]').forEach(card=>{
+    card.addEventListener('mousemove', (e)=>{
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left)/r.width - 0.5;
+      const y = (e.clientY - r.top)/r.height - 0.5;
+      card.style.transform = `perspective(600px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', ()=>{ card.style.transform = 'perspective(600px) rotateY(0) rotateX(0) translateY(0)'; });
+  });
+
+  // ---------- Floating particle canvases (hero + finale) ----------
+  function initParticles(canvasId, color){
+    const canvas = document.getElementById(canvasId);
+    if(!window.THREE || !canvas) return;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 50);
+    camera.position.z = 8;
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+    function resize(){
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      renderer.setSize(w,h,false);
+      camera.aspect = w/h;
+      camera.updateProjectionMatrix();
+    }
+
+    const count = 120;
+    const geo = new THREE.BufferGeometry();
+    const positions = new Float32Array(count*3);
+    for(let i=0;i<count;i++){
+      positions[i*3] = (Math.random()-0.5)*14;
+      positions[i*3+1] = (Math.random()-0.5)*9;
+      positions[i*3+2] = (Math.random()-0.5)*6;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    const mat = new THREE.PointsMaterial({color, size:0.045, transparent:true, opacity:0.7});
+    const points = new THREE.Points(geo, mat);
+    scene.add(points);
+
+    let mouseX = 0;
+    window.addEventListener('mousemove', (e)=>{ mouseX = (e.clientX/window.innerWidth - 0.5); });
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    function animate(){
+      points.rotation.y += 0.0006;
+      camera.position.x += (mouseX*0.6 - camera.position.x) * 0.02;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+  initParticles('hero-particles', 0xD8A857);
+  initParticles('finale-particles', 0xD8A857);
+</script>
+</body>
+</html>
