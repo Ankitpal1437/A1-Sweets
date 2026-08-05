@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A1 Sweets — Ulhasnagar, Since 1965</title>
+<meta name="description" content="A1 Sweets. Sixty years of mithai, crafted in Ulhasnagar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF8F3;
+    --ink:#141311;
+    --gray:#6B675D;
+    --gray-dim:#C7C0AF;
+    --gold:#B8863E;
+    --gold-bright:#D8A857;
+    --line: rgba(20,19,17,0.13);
+    --line-soft: rgba(20,19,17,0.07);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:auto;}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;
+    cursor:default;
+  }
+  .serif{font-family:'Fraunces',serif;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:400;line-height:0.98;letter-spacing:-0.02em;}
+  i,em{font-style:italic;font-family:'Fraunces',serif;color:var(--gold);}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--gray);}
+  a{color:inherit;text-decoration:none;}
+  img,video{max-width:100%;display:block;}
+  section{position:relative;}
+  ::selection{background:var(--ink);color:var(--bg);}
+
+  /* ============ CUSTOM CURSOR ============ */
+  #cursor{
+    position:fixed;top:0;left:0;width:10px;height:10px;border-radius:50%;
+    background:var(--ink);pointer-events:none;z-index:999;
+    transform:translate(-50%,-50%);
+    transition:width .3s ease, height .3s ease, background .3s ease;
+    mix-blend-mode:difference;
+  }
+  #cursor.on-media{width:64px;height:64px;background:#F5F0E4;}
+  #cursor .cursor-label{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono';font-size:0.55rem;letter-spacing:1px;color:var(--ink);
+    opacity:0;transition:opacity .3s ease;
+  }
+  #cursor.on-media .cursor-label{opacity:1;}
+  @media(max-width:1000px){ #cursor{display:none;} }
+
+  /* ============ PRELOADER ============ */
+  #preloader{
+    position:fixed;inset:0;z-index:9999;background:var(--bg);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity .9s ease, visibility .9s ease;
+  }
+  #preloader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  #preloader .pl-word{font-family:'Fraunces';font-weight:400;font-size:clamp(2.4rem,7vw,5rem);letter-spacing:-0.01em;overflow:hidden;}
+  #preloader .pl-word span{display:inline-block;transform:translateY(110%);}
+  #preloader .pl-rule{width:0;height:1px;background:var(--ink);margin-top:22px;transition:width 1.1s cubic-bezier(.6,0,.2,1);}
+  #preloader.run .pl-rule{width:120px;}
+
+  /* ============ CHAPTER RAIL (side nav) ============ */
+  #rail{
+    position:fixed;left:26px;top:50%;transform:translateY(-50%);z-index:150;
+    display:flex;flex-direction:column;gap:20px;align-items:center;
+  }
+  .rail-dot{
+    width:6px;height:6px;border-radius:50%;background:var(--gray-dim);
+    cursor:pointer;position:relative;transition:background .3s ease;
+  }
+  .rail-dot.active{background:var(--ink);}
+  .rail-dot .rail-label{
+    position:absolute;left:16px;top:50%;transform:translateY(-50%);
+    font-family:'IBM Plex Mono';font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;
+    white-space:nowrap;opacity:0;transition:opacity .25s ease;color:var(--ink);
+  }
+  .rail-dot:hover .rail-label, .rail-dot.active .rail-label{opacity:0.6;}
+  #rail.on-dark .rail-dot{background:rgba(245,240,228,0.4);}
+  #rail.on-dark .rail-dot.active{background:#F5F0E4;}
+  #rail.on-dark .rail-label{color:#F5F0E4;}
+  @media(max-width:820px){ #rail{display:none;} }
+
+  /* ============ TOP CHROME ============ */
+  #chrome{
+    position:fixed;top:0;left:0;right:0;z-index:150;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 5vw;mix-blend-mode:difference;
+  }
+  #chrome .logotype{font-family:'Fraunces';font-size:1rem;color:#F5F0E4;letter-spacing:0.5px;}
+  #menu-btn{
+    background:none;border:none;font-family:'IBM Plex Mono';font-size:0.68rem;
+    letter-spacing:2px;text-transform:uppercase;color:#F5F0E4;cursor:pointer;
+    display:flex;align-items:center;gap:10px;
+  }
+  #menu-btn .bars{width:22px;height:9px;position:relative;}
+  #menu-btn .bars span{position:absolute;left:0;right:0;height:1px;background:#F5F0E4;}
+  #menu-btn .bars span:first-child{top:0;}
+  #menu-btn .bars span:last-child{bottom:0;}
+
+  /* ============ FULLSCREEN NAV OVERLAY ============ */
+  #nav-overlay{
+    position:fixed;inset:0;z-index:300;background:var(--ink);
+    display:flex;flex-direction:column;justify-content:center;padding:0 8vw;
+    clip-path:circle(0% at calc(100% - 5vw) 5%);
+    transition:clip-path .8s cubic-bezier(.6,0,.2,1);
+  }
+  #nav-overlay.open{clip-path:circle(150% at calc(100% - 5vw) 5%);}
+  #nav-overlay .close-btn{
+    position:absolute;top:26px;right:5vw;background:none;border:none;
+    font-family:'IBM Plex Mono';font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;
+    color:#F5F0E4;cursor:pointer;
+  }
+  #nav-overlay .nav-list{list-style:none;}
+  #nav-overlay .nav-list li{overflow:hidden;}
+  #nav-overlay .nav-list a{
+    display:inline-flex;align-items:baseline;gap:20px;
+    font-family:'Fraunces';font-size:clamp(2.6rem,7vw,5.4rem);
+    color:rgba(245,240,228,0.35);
+    transition:color .35s ease, padding-left .35s ease;
+    padding:6px 0;
+  }
+  #nav-overlay .nav-list a:hover{color:#F5F0E4;padding-left:14px;}
+  #nav-overlay .nav-list a .n{font-family:'IBM Plex Mono';font-size:0.9rem;color:var(--gold-bright);}
+  #nav-overlay .nav-foot{
+    position:absolute;bottom:40px;left:8vw;right:8vw;
+    display:flex;justify-content:space-between;
+    font-family:'IBM Plex Mono';font-size:0.66rem;letter-spacing:1.5px;
+    color:rgba(245,240,228,0.5);flex-wrap:wrap;gap:10px;
+  }
+  #nav-overlay .nav-foot a{color:rgba(245,240,228,0.75);}
+
+  /* ============ PERSISTENT ORDER LINK ============ */
+  #order-fixed{
+    position:fixed;right:30px;bottom:30px;z-index:150;
+    font-family:'IBM Plex Mono';font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;
+    padding:14px 22px;background:var(--ink);color:#F5F0E4;border-radius:100px;
+  }
+  @media(max-width:820px){ #order-fixed{right:18px;bottom:18px;padding:12px 18px;font-size:0.62rem;} }
+
+  /* ============ MASK REVEAL TEXT ============ */
+  .mask{overflow:hidden;display:block;}
+  .mask > span{display:inline-block;transform:translateY(115%);will-change:transform;}
+
+  /* ============ VIDEO BASE ============ */
+  .full-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .scrim-b{position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,8,6,0.5), rgba(10,8,6,0.2) 45%, rgba(10,8,6,0.72));}
+  .scrim-b-soft{position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,8,6,0.25), rgba(10,8,6,0.05) 40%, rgba(10,8,6,0.55));}
+
+  /* ============ 00 — HERO ============ */
+  #hero{height:100svh;overflow:hidden;color:#F5F0E4;}
+  #hero .h-a1{
+    position:absolute;top:8vh;left:-1.5vw;
+    font-size:clamp(6rem,22vw,17rem);line-height:0.8;
+    z-index:2;pointer-events:none;
+  }
+  #hero .h-sweets{
+    position:absolute;bottom:6vh;right:-1vw;
+    font-size:clamp(3.6rem,13vw,10rem);line-height:0.8;
+    z-index:2;pointer-events:none;text-align:right;
+  }
+  #hero .h-meta{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;z-index:2;
+  }
+  #hero .h-meta .eyebrow{color:var(--gold-bright);margin-bottom:10px;}
+  #hero .h-meta p{font-family:'Fraunces';font-style:italic;font-size:1.05rem;color:rgba(245,240,228,0.85);max-width:280px;}
+  #hero .h-scroll{
+    position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;
+    font-family:'IBM Plex Mono';font-size:0.6rem;letter-spacing:2px;color:rgba(245,240,228,0.65);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  #hero .h-scroll::after{content:"";width:1px;height:44px;background:linear-gradient(rgba(245,240,228,0.7), transparent);}
+
+  /* ============ CHAPTER LABEL (shared motif) ============ */
+  .ch-label{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+  .ch-label .ch-num{font-family:'IBM Plex Mono';font-size:0.7rem;color:var(--gold);}
+  .ch-label .ch-line{width:38px;height:1px;background:var(--line);}
+  .ch-label .ch-name{font-family:'IBM Plex Mono';font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gray);}
+
+  /* ============ I — STORY (asymmetric split) ============ */
+  #story{padding:16vh 8vw 18vh;background:var(--bg);}
+  .story-layout{display:grid;grid-template-columns:0.85fr 1.15fr;gap:0;align-items:start;position:relative;}
+  @media(max-width:900px){.story-layout{grid-template-columns:1fr;gap:60px;}}
+  .story-text{padding-right:40px;position:relative;z-index:2;}
+  .story-text h2{font-size:clamp(2.4rem,5vw,4rem);max-width:420px;}
+  .story-pull{
+    font-family:'Fraunces';font-style:italic;font-weight:400;
+    font-size:clamp(1.6rem,2.6vw,2.1rem);line-height:1.3;color:var(--ink);
+    margin:44px 0 40px;max-width:480px;
+  }
+  .story-pull::before{content:'"';color:var(--gold);}
+  .story-body{font-size:0.94rem;font-weight:300;color:var(--gray);line-height:1.85;max-width:420px;}
+  .story-marks{display:flex;gap:50px;margin-top:56px;}
+  .story-marks div b{display:block;font-family:'Fraunces';font-size:1.5rem;color:var(--gold);}
+  .story-marks div span{font-family:'IBM Plex Mono';font-size:0.6rem;letter-spacing:1.5px;color:var(--gray);text-transform:uppercase;}
+  .story-media{
+    position:relative;aspect-ratio:3/4;overflow:hidden;
+    margin-top:-60px;
+  }
+  @media(max-width:900px){.story-media{margin-top:0;}}
+  .story-media img{width:100%;height:100%;object-fit:cover;transform:scale(1.2);}
+
+  /* ============ II — CRAFT (kinetic full-bleed video type) ============ */
+  #craft{height:100svh;color:#F5F0E4;overflow:hidden;}
+  #craft .craft-inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:0 6vw;}
+  #craft .ch-label .ch-name, #craft .ch-label .ch-num{color:rgba(245,240,228,0.7);}
+  #craft .ch-label .ch-line{background:rgba(245,240,228,0.25);}
+  #craft .craft-word{
+    font-size:clamp(3.4rem,11vw,9rem);
+    max-width:1200px;
+  }
+  #craft .craft-word .accentline{color:var(--gold-bright);}
+  #craft p{margin-top:26px;font-size:1rem;font-weight:300;max-width:420px;color:rgba(245,240,228,0.82);}
+
+  /* ============ III — MENU (editorial catalogue) ============ */
+  #menu{padding:16vh 6vw 14vh;background:var(--bg);}
+  .menu-intro{max-width:640px;margin-bottom:10vh;}
+  .menu-intro h2{font-size:clamp(2.4rem,5.5vw,4.4rem);}
+  .menu-intro p{margin-top:18px;font-size:0.9rem;color:var(--gray);font-weight:300;max-width:440px;}
+  .menu-layout{display:grid;grid-template-columns:200px 1fr;gap:60px;align-items:start;}
+  @media(max-width:900px){.menu-layout{grid-template-columns:1fr;}}
+  .menu-sidebar{position:sticky;top:120px;display:flex;flex-direction:column;gap:14px;}
+  @media(max-width:900px){.menu-sidebar{display:none;}}
+  .menu-sidebar button{
+    text-align:left;background:none;border:none;cursor:pointer;
+    font-family:'IBM Plex Mono';font-size:0.68rem;letter-spacing:1px;
+    color:var(--gray-dim);padding:4px 0;transition:color .25s ease;
+  }
+  .menu-sidebar button.active{color:var(--ink);}
+  .menu-cat-block{position:relative;padding-top:70px;border-top:1px solid var(--line);}
+  .menu-cat-block:first-child{padding-top:0;border-top:none;}
+  .menu-cat-block .cat-watermark{
+    position:absolute;top:2px;right:0;
+    font-family:'IBM Plex Mono';font-size:0.9rem;color:var(--gray-dim);
+    letter-spacing:1px;
+  }
+  .menu-cat-block h3{font-size:clamp(1.7rem,3vw,2.4rem);margin-bottom:6px;}
+  .menu-cat-block .cat-desc{font-family:'Fraunces';font-style:italic;color:var(--gold);font-size:0.9rem;margin-bottom:34px;}
+  .menu-row{display:flex;align-items:baseline;gap:16px;padding:17px 0;border-bottom:1px solid var(--line-soft);}
+  .menu-row .m-left{flex:1;}
+  .menu-row h4{font-family:'Fraunces';font-weight:400;font-size:1.14rem;}
+  .menu-row .m-note{font-family:'IBM Plex Mono';font-size:0.63rem;color:var(--gray-dim);margin-top:4px;letter-spacing:0.5px;}
+  .menu-row .m-desc{font-size:0.78rem;color:var(--gray);margin-top:3px;font-weight:300;}
+  .menu-row .m-right{text-align:right;white-space:nowrap;}
+  .menu-row .m-price{font-family:'IBM Plex Mono';font-size:0.92rem;color:var(--gold);}
+  .menu-row .m-unit{display:block;font-size:0.62rem;color:var(--gray-dim);margin-top:2px;}
+
+  /* ============ IV — COLLECTION (horizontal scroll reel) ============ */
+  #collection{background:var(--ink);color:#F5F0E4;overflow:hidden;}
+  .collection-head{padding:14vh 6vw 8vh;}
+  .collection-head .ch-label .ch-name, .collection-head .ch-label .ch-num{color:rgba(245,240,228,0.7);}
+  .collection-head .ch-label .ch-line{background:rgba(245,240,228,0.25);}
+  .collection-head h2{font-size:clamp(2.4rem,6vw,4.6rem);max-width:820px;}
+  .collection-track{display:flex;padding-left:6vw;padding-bottom:16vh;}
+  .collection-slide{
+    flex:none;width:min(62vw, 620px);margin-right:5vw;
+    display:flex;flex-direction:column;
+  }
+  .collection-slide .cs-media{width:100%;aspect-ratio:3/4;overflow:hidden;}
+  .collection-slide .cs-media img{width:100%;height:100%;object-fit:cover;}
+  .collection-slide .cs-meta{display:flex;justify-content:space-between;align-items:baseline;margin-top:22px;}
+  .collection-slide h3{font-size:clamp(1.5rem,2.6vw,2.1rem);}
+  .collection-slide .cs-num{font-family:'IBM Plex Mono';font-size:0.72rem;color:var(--gold-bright);}
+  .collection-slide p{margin-top:8px;font-size:0.82rem;color:rgba(245,240,228,0.55);font-weight:300;max-width:340px;}
+
+  /* ============ V — GIFTING (full bleed split type) ============ */
+  #gifting{height:100svh;color:#F5F0E4;overflow:hidden;}
+  #gifting .gift-inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:14vh 6vw 10vh;}
+  #gifting .ch-label .ch-name, #gifting .ch-label .ch-num{color:rgba(245,240,228,0.7);}
+  #gifting .ch-label .ch-line{background:rgba(245,240,228,0.25);}
+  #gifting .gift-top h2{font-size:clamp(3rem,9vw,7.5rem);}
+  #gifting .gift-top h2 .line2{display:block;text-align:right;color:var(--gold-bright);}
+  #gifting .gift-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;}
+  #gifting .gift-bottom p{font-family:'Fraunces';font-style:italic;font-size:1.1rem;max-width:340px;color:rgba(245,240,228,0.85);}
+  .link-cta{
+    font-family:'IBM Plex Mono';font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:10px;
+    border-bottom:1px solid currentColor;padding-bottom:4px;
+  }
+  .link-cta .arrow{transition:transform .3s ease;}
+  .link-cta:hover .arrow{transform:translateX(6px);}
+
+  /* ============ VI — VISIT (typographic poster) ============ */
+  #visit{padding:16vh 6vw 16vh;background:var(--bg);position:relative;overflow:hidden;}
+  #visit .visit-map-bg{position:absolute;inset:0;opacity:0.14;filter:grayscale(1) contrast(1.1);}
+  #visit .visit-map-bg iframe{width:100%;height:100%;border:0;}
+  #visit .visit-inner{position:relative;z-index:2;}
+  #visit .v-address{
+    font-size:clamp(2.4rem,6.5vw,5.4rem);max-width:900px;margin:40px 0 60px;
+  }
+  .v-grid{display:flex;gap:80px;flex-wrap:wrap;}
+  .v-grid div .eyebrow{margin-bottom:10px;}
+  .v-grid div p, .v-grid div a{font-family:'Fraunces';font-size:1.15rem;}
+
+  /* ============ VII — FINALE ============ */
+  #finale{height:100svh;color:#F5F0E4;overflow:hidden;}
+  #finale .finale-inner{
+    position:absolute;inset:0;z-index:2;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  }
+  #finale .brand-mark{font-size:clamp(3rem,9vw,7rem);}
+  #finale .eyebrow{color:var(--gold-bright);margin-top:20px;}
+  #finale .tagline{font-family:'Fraunces';font-style:italic;font-size:1.2rem;margin-top:18px;color:rgba(245,240,228,0.85);}
+  #finale .link-cta{margin-top:44px;font-size:0.78rem;}
+
+  /* ============ FOOTER ============ */
+  footer{
+    background:var(--ink);color:rgba(245,240,228,0.6);
+    padding:26px 6vw;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+    font-family:'IBM Plex Mono';font-size:0.64rem;letter-spacing:1px;
+  }
+  footer .f-links{display:flex;gap:22px;flex-wrap:wrap;}
+  footer .f-links a{color:rgba(245,240,228,0.85);}
+
+  @media (prefers-reduced-motion: reduce){
+    .mask > span{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"><span class="cursor-label">VIEW</span></div>
+
+<div id="preloader">
+  <div class="pl-word"><span>A1&nbsp;SWEETS</span></div>
+  <div class="pl-rule"></div>
+</div>
+
+<nav id="chrome">
+  <div class="logotype">A1 Sweets</div>
+  <button id="menu-btn">
+    <span class="bars"><span></span><span></span></span>
+    Menu
+  </button>
+</nav>
+
+<div id="nav-overlay">
+  <button class="close-btn" id="nav-close">Close ✕</button>
+  <ul class="nav-list">
+    <li><a href="#hero" data-close><span class="n">00</span> Home</a></li>
+    <li><a href="#story" data-close><span class="n">01</span> Story</a></li>
+    <li><a href="#craft" data-close><span class="n">02</span> Craft</a></li>
+    <li><a href="#menu" data-close><span class="n">03</span> Menu</a></li>
+    <li><a href="#collection" data-close><span class="n">04</span> Collection</a></li>
+    <li><a href="#gifting" data-close><span class="n">05</span> Gifting</a></li>
+    <li><a href="#visit" data-close><span class="n">06</span> Visit</a></li>
+  </ul>
+  <div class="nav-foot">
+    <span>Ulhasnagar No. 3, Maharashtra · Since 1965</span>
+    <a href="https://wa.me/919881217775" target="_blank">+91 98812 17775</a>
+  </div>
+</div>
+
+<a id="order-fixed" href="https://wa.me/919881217775" target="_blank">Order →</a>
+
+<div id="rail">
+  <div class="rail-dot" data-target="#hero"><span class="rail-label">Home</span></div>
+  <div class="rail-dot" data-target="#story"><span class="rail-label">Story</span></div>
+  <div class="rail-dot" data-target="#craft"><span class="rail-label">Craft</span></div>
+  <div class="rail-dot" data-target="#menu"><span class="rail-label">Menu</span></div>
+  <div class="rail-dot" data-target="#collection"><span class="rail-label">Collection</span></div>
+  <div class="rail-dot" data-target="#gifting"><span class="rail-label">Gifting</span></div>
+  <div class="rail-dot" data-target="#visit"><span class="rail-label">Visit</span></div>
+</div>
+
+<!-- 00 — HERO -->
+<section id="hero" data-chapter="hero" data-theme="dark">
+  <video class="full-video" autoplay muted loop playsinline poster="posters/poster-1.jpg">
+    <source src="videos/video-1.mp4" type="video/mp4">
+  </video>
+  <div class="scrim-b"></div>
+  <h1 class="h-a1 serif">A1</h1>
+  <h1 class="h-sweets serif"><i>Sweets</i></h1>
+  <div class="h-meta">
+    <div class="eyebrow">Ulhasnagar · Est. 1965</div>
+    <p>Crafted for celebration, one barfi at a time.</p>
+  </div>
+  <div class="h-scroll">Scroll</div>
+</section>
+
+<!-- I — STORY -->
+<section id="story" data-chapter="story" data-theme="light">
+  <div class="story-layout">
+    <div class="story-text">
+      <div class="ch-label"><span class="ch-num">01</span><span class="ch-line"></span><span class="ch-name">The Story</span></div>
+      <h2>Sixty years,<br>one recipe.</h2>
+      <p class="story-pull">Ek rupaya bhi sau rupaye jaisa sambhalo — paisa nahi, uski keemat badhti hai.</p>
+      <p class="story-body">1965 mein Madhavdas Kanayalal Jaisinghani ne Shivaji Chowk pe ek chhoti si dukaan shuru ki. Dheere-dheere Ulhasnagar ke swaad ne mithai ki taraf rukh kiya — aur 1988 tak A1 poori tarah ek sweet house ban chuka tha. Aaj teesri peedhi wahi bharosa aage badha rahi hai.</p>
+      <div class="story-marks">
+        <div><b>1965</b><span>Founded</span></div>
+        <div><b>1988</b><span>Full Mithai House</span></div>
+        <div><b>3rd</b><span>Generation</span></div>
+      </div>
+    </div>
+    <div class="story-media" data-parallax>
+      <img src="posters/poster-1.jpg" alt="A1 Sweets platter">
+    </div>
+  </div>
+</section>
+
+<!-- II — CRAFT -->
+<section id="craft" data-chapter="craft" data-theme="dark">
+  <video class="full-video" autoplay muted loop playsinline poster="posters/poster-2.jpg">
+    <source src="videos/video-2.mp4" type="video/mp4">
+  </video>
+  <div class="scrim-b"></div>
+  <div class="craft-inner">
+    <div class="ch-label"><span class="ch-num">02</span><span class="ch-line"></span><span class="ch-name">The Craft</span></div>
+    <h2 class="craft-word serif">Zero shortcuts.<br><span class="accentline"><i>Every single day.</i></span></h2>
+    <p>Pure ghee. Hand-picked dry fruits. A recipe that hasn't moved in sixty years — because it never needed to.</p>
+  </div>
+</section>
+
+<!-- III — MENU -->
+<section id="menu" data-chapter="menu" data-theme="light">
+  <div class="menu-intro">
+    <div class="ch-label"><span class="ch-num">03</span><span class="ch-line"></span><span class="ch-name">Full Menu</span></div>
+    <h2>Everything<br>we make.</h2>
+    <p>The complete price list — fourteen categories, made fresh through the day.</p>
+  </div>
+  <div class="menu-layout">
+    <div class="menu-sidebar" id="menu-sidebar"></div>
+    <div id="menu-catalogue"></div>
+  </div>
+</section>
+
+<!-- IV — COLLECTION -->
+<section id="collection" data-chapter="collection" data-theme="dark">
+  <div class="collection-head">
+    <div class="ch-label"><span class="ch-num">04</span><span class="ch-line"></span><span class="ch-name">The Collection</span></div>
+    <h2>A closer look<br>at what we make.</h2>
+  </div>
+  <div class="collection-track" id="collection-track">
+    <div class="collection-slide">
+      <div class="cs-media"><img src="images/kaju-katli.jpg" alt="Kaju Katli"></div>
+      <div class="cs-meta"><h3>Kaju Katli</h3><span class="cs-num">01</span></div>
+      <p>Silver-vark finished cashew barfi, festive gifting perfected.</p>
+    </div>
+    <div class="collection-slide">
+      <div class="cs-media"><img src="images/anjeer-delight.jpg" alt="Anjeer Dryfruit"></div>
+      <div class="cs-meta"><h3>Anjeer Dryfruit</h3><span class="cs-num">02</span></div>
+      <p>Dried fig and dry-fruit special. Melt-in-mouth, low calorie.</p>
+    </div>
+    <div class="collection-slide">
+      <div class="cs-media"><img src="images/rasmalai.jpg" alt="Rasmalai"></div>
+      <div class="cs-meta"><h3>Rasmalai</h3><span class="cs-num">03</span></div>
+      <p>Soft chenna in reduced milk, garnished with pistachio.</p>
+    </div>
+    <div class="collection-slide">
+      <div class="cs-media"><img src="posters/poster-3.jpg" alt="A1 Sweets Collection"></div>
+      <div class="cs-meta"><h3>The Lineup</h3><span class="cs-num">04</span></div>
+      <p>Assorted sweets, plated the way sixty years of practice demands.</p>
+    </div>
+    <div class="collection-slide">
+      <div class="cs-media"><img src="images/festival-box.jpg" alt="Festival Box"></div>
+      <div class="cs-meta"><h3>Festival Box</h3><span class="cs-num">05</span></div>
+      <p>Curated assortments for Diwali, Rakhi and festive gifting.</p>
+    </div>
+    <div class="collection-slide">
+      <div class="cs-media"><img src="images/corporate-gift.jpg" alt="Corporate Gifting"></div>
+      <div class="cs-meta"><h3>Corporate Gifting</h3><span class="cs-num">06</span></div>
+      <p>Stacked, ribboned, bulk-ready — for the giving season.</p>
+    </div>
+  </div>
+</section>
+
+<!-- V — GIFTING -->
+<section id="gifting" data-chapter="gifting" data-theme="dark">
+  <video class="full-video" autoplay muted loop playsinline poster="posters/poster-5.jpg">
+    <source src="videos/video-5.mp4" type="video/mp4">
+  </video>
+  <div class="scrim-b-soft"></div>
+  <div class="gift-inner">
+    <div class="ch-label"><span class="ch-num">05</span><span class="ch-line"></span><span class="ch-name">Gifting</span></div>
+    <div class="gift-top">
+      <h2 class="serif">Mithai bhejiye.<span class="line2"><i>Rishte meethe kijiye.</i></span></h2>
+    </div>
+    <div class="gift-bottom">
+      <p>Wedding hampers. Festival boxes. Corporate gifting — made to order, wrapped with care.</p>
+      <a class="link-cta" href="https://wa.me/919881217775" target="_blank">Enquire on WhatsApp <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- VI — VISIT -->
+<section id="visit" data-chapter="visit" data-theme="light">
+  <div class="visit-map-bg"><iframe src="https://www.google.com/maps?q=A-1+Sweets+Ulhasnagar&output=embed" loading="lazy"></iframe></div>
+  <div class="visit-inner">
+    <div class="ch-label"><span class="ch-num">06</span><span class="ch-line"></span><span class="ch-name">Visit</span></div>
+    <h2 class="v-address serif">Shop 718/719,<br>Kalyan-Ambernath Road,<br><i>Ulhasnagar No. 3.</i></h2>
+    <div class="v-grid">
+      <div><div class="eyebrow">Phone</div><a href="tel:+919881217775">+91 98812 17775</a></div>
+      <div><div class="eyebrow">Hours</div><p>Daily, 10 AM – 10 PM</p></div>
+      <div><div class="eyebrow">Rating</div><p>4.4★ · 5,200+ reviews</p></div>
+      <div><div class="eyebrow">Directions</div><a href="https://www.google.com/maps/place/?q=place_id:ChIJJ5w2LxWU5zsRBWfB-OZJGVU" target="_blank">Open in Maps →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- VII — FINALE -->
+<section id="finale" data-chapter="finale" data-theme="dark">
+  <video class="full-video" autoplay muted loop playsinline poster="posters/poster-6.jpg">
+    <source src="videos/video-6.mp4" type="video/mp4">
+  </video>
+  <div class="scrim-b"></div>
+  <div class="finale-inner">
+    <div class="brand-mark serif">A1 Sweets</div>
+    <div class="eyebrow">Since 1965 · Ulhasnagar</div>
+    <p class="tagline">Har khushi ke pal ko meetha banaiye.</p>
+    <a class="link-cta" href="https://wa.me/919881217775" target="_blank">Order on WhatsApp <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<footer>
+  <span>© A1 Sweets — Ulhasnagar No. 3, Maharashtra</span>
+  <div class="f-links">
+    <a href="https://wa.me/919881217775" target="_blank">WhatsApp</a>
+    <a href="tel:+919881217775">Call</a>
+    <a href="https://www.google.com/maps/place/?q=place_id:ChIJJ5w2LxWU5zsRBWfB-OZJGVU" target="_blank">Maps</a>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+  /* ---------- Lenis smooth scroll ---------- */
+  let lenis;
+  try{
+    lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    lenis.on('scroll', ()=>{ if(window.ScrollTrigger) ScrollTrigger.update(); });
+    function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }catch(e){}
+  function scrollToTarget(sel){
+    const el = document.querySelector(sel);
+    if(!el) return;
+    if(lenis) lenis.scrollTo(el, {duration:1.3}); else el.scrollIntoView({behavior:'smooth'});
+  }
+
+  /* ---------- Preloader ---------- */
+  const preloader = document.getElementById('preloader');
+  requestAnimationFrame(()=>preloader.classList.add('run'));
+  if(window.gsap){
+    gsap.to('.pl-word span', {y:'0%', duration:1, delay:0.15, ease:'power4.out'});
+  } else {
+    document.querySelector('.pl-word span').style.transform = 'translateY(0)';
+  }
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>preloader.classList.add('hidden'), 1500);
+  });
+
+  /* ---------- Custom cursor ---------- */
+  const cursor = document.getElementById('cursor');
+  window.addEventListener('mousemove', (e)=>{
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('.story-media, .cs-media').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>cursor.classList.add('on-media'));
+    el.addEventListener('mouseleave', ()=>cursor.classList.remove('on-media'));
+  });
+
+  /* ---------- Fullscreen nav overlay ---------- */
+  const navOverlay = document.getElementById('nav-overlay');
+  document.getElementById('menu-btn').addEventListener('click', ()=>navOverlay.classList.add('open'));
+  document.getElementById('nav-close').addEventListener('click', ()=>navOverlay.classList.remove('open'));
+  navOverlay.querySelectorAll('[data-close]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      e.preventDefault();
+      navOverlay.classList.remove('open');
+      setTimeout(()=>scrollToTarget(a.getAttribute('href')), 300);
+    });
+  });
+
+  /* ---------- Chapter rail: nav + active state ---------- */
+  const railDots = document.querySelectorAll('.rail-dot');
+  const railEl = document.getElementById('rail');
+  const chromeEl = document.getElementById('chrome');
+  railDots.forEach(dot=>{
+    dot.addEventListener('click', ()=>scrollToTarget(dot.dataset.target));
+  });
+  const chapters = document.querySelectorAll('[data-chapter]');
+  const chapObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = '#' + entry.target.id;
+        railDots.forEach(d=>d.classList.toggle('active', d.dataset.target === id));
+        const theme = entry.target.dataset.theme;
+        railEl.classList.toggle('on-dark', theme === 'dark');
+        chromeEl.classList.toggle('on-dark', theme === 'dark');
+      }
+    });
+  }, {threshold:0.5});
+  chapters.forEach(c=>chapObserver.observe(c));
+
+  /* ---------- Mask text reveal + fade utility ---------- */
+  if(window.gsap && window.ScrollTrigger){
+    gsap.registerPlugin(ScrollTrigger);
+
+    // hero letters already handled by preloader-independent load; add subtle parallax
+    gsap.to('#hero .full-video', {yPercent:12, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:1}});
+
+    // story image parallax + scale-down reveal
+    gsap.fromTo('.story-media img', {scale:1.25}, {
+      scale:1, ease:'none',
+      scrollTrigger:{trigger:'.story-media', start:'top bottom', end:'bottom top', scrub:1}
+    });
+    gsap.fromTo('.story-text', {opacity:0, y:40}, {
+      opacity:1, y:0, duration:1, ease:'power2.out',
+      scrollTrigger:{trigger:'.story-text', start:'top 75%'}
+    });
+
+    // craft video parallax + word scale-in
+    gsap.to('#craft .full-video', {yPercent:-10, ease:'none', scrollTrigger:{trigger:'#craft', start:'top bottom', end:'bottom top', scrub:1}});
+    gsap.fromTo('.craft-word', {opacity:0.3, y:30}, {
+      opacity:1, y:0, ease:'power2.out',
+      scrollTrigger:{trigger:'#craft', start:'top 70%', end:'top 20%', scrub:1}
+    });
+
+    // menu rows stagger reveal
+    gsap.utils.toArray('.menu-cat-block').forEach(block=>{
+      gsap.fromTo(block, {opacity:0, y:30}, {
+        opacity:1, y:0, duration:0.9, ease:'power2.out',
+        scrollTrigger:{trigger:block, start:'top 85%'}
+      });
+    });
+
+    // gifting video parallax
+    gsap.to('#gifting .full-video', {yPercent:10, ease:'none', scrollTrigger:{trigger:'#gifting', start:'top bottom', end:'bottom top', scrub:1}});
+    gsap.fromTo('.gift-top h2', {opacity:0, y:40}, {
+      opacity:1, y:0, ease:'power2.out',
+      scrollTrigger:{trigger:'#gifting', start:'top 70%', end:'top 30%', scrub:1}
+    });
+
+    // finale video parallax
+    gsap.to('#finale .full-video', {yPercent:12, ease:'none', scrollTrigger:{trigger:'#finale', start:'top bottom', end:'bottom top', scrub:1}});
+    gsap.fromTo('.finale-inner', {opacity:0}, {
+      opacity:1, duration:1.2, ease:'power2.out',
+      scrollTrigger:{trigger:'#finale', start:'top 60%'}
+    });
+
+    // collection horizontal scroll-jacking
+    function initCollectionScroll(){
+      const track = document.getElementById('collection-track');
+      const section = document.getElementById('collection');
+      if(!track || !section) return;
+      const distance = () => track.scrollWidth - window.innerWidth;
+      const trigger = ScrollTrigger.create({
+        trigger: section, start:'top top', end:() => '+=' + distance(),
+        scrub:1, pin:true, anticipatePin:1,
+        onUpdate: self => {
+          gsap.set(track, {x: -distance() * self.progress});
+        }
+      });
+    }
+    window.addEventListener('load', initCollectionScroll);
+  }
+
+  /* ---------- Menu data + render (official price list) ---------- */
+  const MENU_DATA = [
+    { cat:"All-Time Sweets", items:[
+      {n:"Gulab Jamun", r:15, u:"per piece"},
+      {n:"Black Jamun", r:20, u:"per piece"},
+      {n:"Balushahi Desi Ghee", r:480, u:"per kg", note:"Best within 3 days"},
+      {n:"Mysore Pak", r:360, u:"per kg", note:"Best within 2 days"},
+      {n:"Tosha", r:340, u:"per kg", note:"Best within 3 days"},
+      {n:"Malpoha", r:360, u:"per kg", note:"Best within 2 days"},
+      {n:"Tikky Khaja", r:360, u:"per kg", note:"Best within 3 days"},
+      {n:"Piss (Kharwas)", r:360, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Sonwada (Desi Ghee)", r:460, u:"per kg", note:"Best within 7 days"},
+      {n:"Rabdi", r:640, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Malai Mysore Pak", r:720, u:"per kg", note:"Best within 3 days"},
+      {n:"Kaju Kofta", r:900, u:"per kg", note:"Best within 4 days"},
+      {n:"Biscoff Kaju Bite", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Double Decker Sev Mithai", r:440, u:"per kg", note:"Best within 2 days"},
+      {n:"Plain Sev Mithai", r:360, u:"per kg", note:"Best within 2 days"}
+    ]},
+    { cat:"Peda", items:[
+      {n:"Doodh Peda", r:600, u:"per kg", note:"Best within 2 days"},
+      {n:"Rabdi Peda", r:640, u:"per kg", note:"Best within 2 days"},
+      {n:"Kandhi Peda", r:640, u:"per kg", note:"Best within 3 days"},
+      {n:"Kesar Peda", r:680, u:"per kg", note:"Best within 2 days"},
+      {n:"Bhugal Peda", r:640, u:"per kg", note:"Best within 2 days"}
+    ]},
+    { cat:"Mawa Barfi", items:[
+      {n:"Malai Barfi (Kalakand)", r:600, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Bhugal Mawa", r:600, u:"per kg", note:"Best within 2 days"},
+      {n:"Milk Cake", r:620, u:"per kg", note:"Best within 2 days"},
+      {n:"Anjeer Barfi", r:640, u:"per kg", note:"Best within 2 days"},
+      {n:"Rajwadi Barfi", r:800, u:"per kg", note:"Best within 2 days"},
+      {n:"Walnut Milkcake", r:820, u:"per kg", note:"Best within 2 days"},
+      {n:"Red Velvet Cheese Barfi", r:940, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Dryfruit Bhugal Barfi", r:640, u:"per kg", note:"Best within 2 days"},
+      {n:"Mango Barfi", r:640, u:"per kg", note:"Best within 24 hrs"}
+    ]},
+    { cat:"Barfi", items:[
+      {n:"Nariyal Barfi", r:620, u:"per kg", note:"Best within 2 days"},
+      {n:"Badaam Roll", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Choco Ice Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Falooda Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Watermelon Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Half Round Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Kaju Casata", r:700, u:"per kg", note:"Best within 2 days"},
+      {n:"Kaju Sangam Barfi", r:820, u:"per kg", note:"Best within 2 days"}
+    ]},
+    { cat:"Laddoo", items:[
+      {n:"Plain Churi Laddoo", r:340, u:"per kg", note:"Best within 15 days"},
+      {n:"Spl Churi Laddoo", r:440, u:"per kg", d:"Kaju & Badaam", note:"Best within 15 days"},
+      {n:"Double Churi Spl Ladoo", r:540, u:"per kg", note:"Best within 15 days"},
+      {n:"Pista Churi Laddoo", r:680, u:"per kg", d:"Desi ghee, kaju, badam & pista — made to order", note:"Best within 15 days"},
+      {n:"Motichoor Laddoo", r:400, u:"per kg", note:"Best within 2 days"},
+      {n:"Boondi Laddoo", r:400, u:"per kg", note:"Best within 2 days"},
+      {n:"Desi Ghee Motichoor Laddoo", r:600, u:"per kg", note:"Best within 2 days"},
+      {n:"Nariyal Laddoo", r:560, u:"per kg", note:"Best within 2 days"},
+      {n:"Desi Ghee Besan Laddoo", r:580, u:"per kg", note:"Best within 12 days"},
+      {n:"Methi Laddoo", r:600, u:"per kg", note:"Best within 15 days"},
+      {n:"Protein Laddoo", r:600, u:"per kg", note:"Best within 15 days"},
+      {n:"Sugarless Dryfruit Laddoo (Honey)", r:1180, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Sev Mithai", items:[
+      {n:"Plain Sev Mithai", r:360, u:"per kg", note:"Best within 2 days"},
+      {n:"Double Decker Sev Mithai", r:440, u:"per kg", note:"Best within 2 days"},
+      {n:"Bhugal Double Decker Sev Mithai", r:440, u:"per kg", note:"Best within 2 days"},
+      {n:"Spl Sev Mithai", r:500, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Desi Ghee Sev Mithai", r:700, u:"per kg", note:"Best within 24 hrs"}
+    ]},
+    { cat:"Bengali Sweets", items:[
+      {n:"Rasgulla", r:20, u:"per piece", note:"Same day fresh"},
+      {n:"Rasmalai", r:35, u:"per piece", note:"Same day fresh"},
+      {n:"Malai Sandwich", r:40, u:"per piece", note:"Same day fresh"},
+      {n:"Rajbhog", r:40, u:"per piece", note:"Same day fresh"},
+      {n:"ChumChum", r:45, u:"per piece", note:"Same day fresh"},
+      {n:"Angoori Rasmalai", r:620, u:"per kg", note:"Same day fresh"},
+      {n:"Jumbo Malai Sandwich", r:45, u:"per piece", note:"Same day fresh"},
+      {n:"Half Round Sandwich", r:40, u:"per piece", note:"Same day fresh"}
+    ]},
+    { cat:"Premium Crunch Sweets", items:[
+      {n:"Bourbon Crunch", r:1100, u:"per kg", note:"Best within 7 days"},
+      {n:"Mango Crunch", r:1100, u:"per kg", note:"Best within 7 days"},
+      {n:"Oreo Crunch", r:1100, u:"per kg", note:"Best within 7 days"},
+      {n:"Hazelnut Crunch", r:1280, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Premium Mewa Sweets", items:[
+      {n:"Mewa Bites", r:1120, u:"per kg", note:"Best within 5 days"},
+      {n:"Mewa Bites (Rose)", r:1120, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Premium Kaju Sweets", items:[
+      {n:"Kaju Katli", r:1100, u:"per kg", note:"Best within 5 days"},
+      {n:"Kesar Kaju Katli", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Black Current Kaju Katli", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Biscoff Kaju Bite", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Kaju Pan", r:1260, u:"per kg", note:"Best within 7 days"},
+      {n:"Kaju Pista Rolls", r:1260, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Premium Sweets", d:"Low Calorie Range", items:[
+      {n:"Khajoor Dryfruit", r:1280, u:"per kg", note:"Best within 15 days"},
+      {n:"Anjeer Dryfruit", r:1380, u:"per kg", note:"Best within 15 days"},
+      {n:"Gulkand Dryfruit", r:1280, u:"per kg", note:"Best within 15 days"},
+      {n:"Honey Dryfruit", r:1280, u:"per kg", note:"Best within 10 days"},
+      {n:"Roasted Rose Pak", r:1280, u:"per kg", note:"Best within 10 days"},
+      {n:"Blueberry Delight", r:1540, u:"per kg", note:"Best within 15 days"},
+      {n:"Cranberry Delight", r:1440, u:"per kg", note:"Best within 15 days"},
+      {n:"Gulkand Mithai", r:1080, u:"per kg", note:"Best within 15 days"}
+    ]},
+    { cat:"Baklawa", items:[
+      {n:"Walnut Baklawa", r:1300, u:"per kg", note:"Best within 7 days"},
+      {n:"Dryfruit Tart", r:1560, u:"per kg", note:"Best within 7 days"},
+      {n:"Dryfruit Pyramid", r:1100, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Chikki", items:[
+      {n:"Kaju Chikki", r:1040, u:"per kg", note:"Best within 7 days"},
+      {n:"Kaju Chikki", r:260, u:"1 pc · 250g", note:"Best within 7 days"},
+      {n:"Dryfruit Chikki", r:1040, u:"per kg", note:"Best within 7 days"},
+      {n:"Dryfruit Chikki", r:260, u:"1 piece", note:"Best within 7 days"}
+    ]},
+    { cat:"Halwa", items:[
+      {n:"Green Kaju Halwa", r:300, u:"per kg", note:"Best within 15 days"},
+      {n:"Orange Badam Halwa", r:360, u:"per kg", note:"Best within 15 days"},
+      {n:"Desi Ghee Mahim Halwa", r:740, u:"per kg", note:"Best within 15 days"},
+      {n:"Mix Dryfruit Halwa", r:740, u:"per kg", note:"Best within 15 days"},
+      {n:"Shahi Pista Halwa", r:1200, u:"per kg", note:"Best within 15 days"}
+    ]}
+  ];
+
+  (function renderMenu(){
+    const sidebar = document.getElementById('menu-sidebar');
+    const catalogue = document.getElementById('menu-catalogue');
+    if(!sidebar || !catalogue) return;
+
+    MENU_DATA.forEach((group, i)=>{
+      const num = String(i+1).padStart(2,'0');
+
+      const sideBtn = document.createElement('button');
+      sideBtn.textContent = group.cat;
+      sideBtn.dataset.idx = i;
+      sideBtn.addEventListener('click', ()=>scrollToTarget('#cat-'+i));
+      sidebar.appendChild(sideBtn);
+
+      const block = document.createElement('div');
+      block.className = 'menu-cat-block';
+      block.id = 'cat-'+i;
+      block.innerHTML = `
+        <div class="cat-watermark">${num} / ${String(MENU_DATA.length).padStart(2,'0')}</div>
+        <h3>${group.cat}</h3>
+        ${group.d ? `<div class="cat-desc"><i>${group.d}</i></div>` : ''}
+        ${group.items.map(item=>`
+          <div class="menu-row">
+            <div class="m-left">
+              <h4>${item.n}</h4>
+              ${item.d ? `<div class="m-desc">${item.d}</div>` : ''}
+              ${item.note ? `<div class="m-note">${item.note}</div>` : ''}
+            </div>
+            <div class="m-right">
+              <span class="m-price">₹${item.r}</span>
+              <span class="m-unit">${item.u}</span>
+            </div>
+          </div>
+        `).join('')}
+      `;
+      catalogue.appendChild(block);
+    });
+
+    // scrollspy for sidebar
+    const blocks = document.querySelectorAll('.menu-cat-block');
+    const sideBtns = sidebar.querySelectorAll('button');
+    const spy = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const idx = entry.target.id.split('-')[1];
+          sideBtns.forEach(b=>b.classList.toggle('active', b.dataset.idx === idx));
+        }
+      });
+    }, {rootMargin:'-30% 0px -60% 0px'});
+    blocks.forEach(b=>spy.observe(b));
+  })();
+</script>
+</body>
+</html>
