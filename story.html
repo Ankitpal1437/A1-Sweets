@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Story — A1 Sweets, Since 1965</title>
+<meta name="description" content="The story of A1 Sweets — sixty years of mithai-making in Ulhasnagar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23141311'/%3E%3Ctext x='50' y='62' font-family='Georgia,serif' font-size='46' fill='%23D8A857' text-anchor='middle'%3EA1%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#FAF8F3; --panel:#F2EEE3; --ink:#141311; --gray:#6B675D; --gray-dim:#C7C0AF;
+    --gold:#B8863E; --gold-bright:#D8A857; --line: rgba(20,19,17,0.13); --line-soft: rgba(20,19,17,0.07);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;
+    opacity:0;transition:opacity .6s ease;}
+  body.loaded{opacity:1;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:400;line-height:1.06;letter-spacing:-0.01em;}
+  i,em{font-style:italic;font-family:'Fraunces',serif;color:var(--gold);}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gray);}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  section{position:relative;}
+  ::selection{background:var(--ink);color:var(--bg);}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .reveal-stagger > *{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal-stagger.in > *{opacity:1;transform:translateY(0);}
+  .reveal-stagger.in > *:nth-child(1){transition-delay:.03s;}
+  .reveal-stagger.in > *:nth-child(2){transition-delay:.09s;}
+  .reveal-stagger.in > *:nth-child(3){transition-delay:.15s;}
+  .reveal-stagger.in > *:nth-child(4){transition-delay:.21s;}
+  .reveal-stagger.in > *:nth-child(5){transition-delay:.27s;}
+  .reveal-stagger.in > *:nth-child(6){transition-delay:.33s;}
+  @media (prefers-reduced-motion: reduce){ .reveal, .reveal-stagger > *{opacity:1;transform:none;transition:none;} }
+
+  .zoom-wrap{overflow:hidden;}
+  .zoom-wrap img{transition:transform .7s cubic-bezier(.2,.7,.2,1);}
+  .zoom-wrap:hover img{transform:scale(1.06);}
+
+  #totop{
+    position:fixed;right:22px;bottom:22px;z-index:90;
+    width:46px;height:46px;border-radius:50%;background:var(--ink);color:#F5F0E4;
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  #totop.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+
+  nav{
+    position:sticky;top:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:20px 5vw;background:rgba(250,248,243,0.88);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .logotype{font-family:'Fraunces';font-size:1.15rem;}
+  nav .nav-links{display:flex;gap:34px;font-size:0.82rem;}
+  nav .nav-links a{opacity:0.7;transition:opacity .2s;position:relative;padding-bottom:4px;}
+  nav .nav-links a.active, nav .nav-links a:hover{opacity:1;}
+  nav .nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);}
+  nav .nav-cta{background:var(--ink);color:#F5F0E4;padding:10px 22px;border-radius:100px;font-size:0.78rem;transition:transform .25s ease;}
+  nav .nav-cta:hover{transform:scale(1.04);}
+  #burger{display:none;background:none;border:none;cursor:pointer;width:26px;height:18px;position:relative;}
+  #burger span{position:absolute;left:0;right:0;height:1px;background:var(--ink);transition:transform .3s ease, opacity .3s ease;}
+  #burger span:nth-child(1){top:0;}
+  #burger span:nth-child(2){top:50%;transform:translateY(-50%);}
+  #burger span:nth-child(3){bottom:0;}
+  #burger.open span:nth-child(1){transform:translateY(8.5px) rotate(45deg);}
+  #burger.open span:nth-child(2){opacity:0;}
+  #burger.open span:nth-child(3){transform:translateY(-8.5px) rotate(-45deg);}
+  @media(max-width:760px){
+    nav .nav-links{
+      display:flex;flex-direction:column;gap:0;
+      position:fixed;top:66px;left:0;right:0;background:var(--bg);
+      border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .35s ease;
+    }
+    nav .nav-links.open{max-height:260px;}
+    nav .nav-links a{padding:16px 5vw;border-bottom:1px solid var(--line-soft);opacity:1;font-size:0.95rem;}
+    nav .nav-links a.active::after{display:none;}
+    nav .nav-links a.active{color:var(--gold);}
+    #burger{display:block;}
+  }
+</style>
+
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:100px;font-size:0.82rem;font-weight:500;transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;}
+  .btn-dark{background:var(--ink);color:#F5F0E4;}
+  .btn-dark:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,19,17,0.18);}
+
+  .eyebrow-row{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+  .eyebrow-row .ln{width:34px;height:1px;background:var(--line);}
+  .section{padding:110px 6vw;}
+  .section-alt{background:var(--panel);}
+
+  /* PAGE HERO */
+  .page-hero{padding:90px 6vw 60px;max-width:780px;}
+  .page-hero h1{font-size:clamp(2.8rem,6.5vw,5rem);}
+  .page-hero p{margin-top:20px;font-size:1rem;font-weight:300;color:var(--gray);max-width:480px;}
+
+  /* STORY BODY */
+  .story-layout{display:grid;grid-template-columns:0.9fr 1.1fr;gap:70px;align-items:start;}
+  @media(max-width:900px){.story-layout{grid-template-columns:1fr;gap:40px;}}
+  .story-layout img{width:100%;aspect-ratio:4/5;object-fit:cover;}
+  .story-copy p{font-size:0.98rem;font-weight:300;color:var(--gray);line-height:1.9;margin-bottom:22px;max-width:520px;}
+  .quote-block{
+    margin:30px 0;padding:30px 0 30px 28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    border-left:2px solid var(--gold);
+  }
+  .quote-block p{font-family:'Fraunces';font-style:italic;font-size:1.5rem;color:var(--ink);line-height:1.4;max-width:520px;}
+  .quote-block span{display:block;margin-top:16px;font-family:'IBM Plex Mono';font-size:0.68rem;color:var(--gray);letter-spacing:1px;}
+
+  /* TIMELINE */
+  .timeline{max-width:720px;margin:0 auto;position:relative;}
+  .tl-row{display:grid;grid-template-columns:110px 1fr;gap:30px;padding:32px 4px;border-top:1px solid var(--line);transition:padding-left .3s ease, background .3s ease;border-radius:8px;}
+  .tl-row:hover{padding-left:16px;background:rgba(184,134,62,0.05);}
+  .tl-row:last-child{border-bottom:1px solid var(--line);}
+  .tl-row .tl-year{font-family:'Fraunces';font-size:1.6rem;color:var(--gold);}
+  .tl-row h4{font-family:'Fraunces';font-weight:400;font-size:1.2rem;margin-bottom:8px;}
+  .tl-row p{font-size:0.88rem;color:var(--gray);font-weight:300;line-height:1.65;max-width:460px;}
+  @media(max-width:560px){
+    .tl-row{grid-template-columns:1fr;gap:8px;}
+    .tl-row .tl-year{font-size:1.3rem;}
+  }
+
+  /* GALLERY */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media(max-width:760px){.gallery{grid-template-columns:1fr 1fr;}}
+  .gallery .zoom-wrap{aspect-ratio:4/5;}
+  .gallery .zoom-wrap img{width:100%;height:100%;object-fit:cover;}
+
+  footer{
+    background:var(--ink);color:rgba(245,240,228,0.6);
+    padding:30px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+    font-family:'IBM Plex Mono';font-size:0.66rem;letter-spacing:1px;
+  }
+  footer .f-links{display:flex;gap:22px;flex-wrap:wrap;}
+  footer .f-links a{color:rgba(245,240,228,0.85);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logotype">A1 Sweets</div>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Home</a>
+    <a href="story.html" class="active">Story</a>
+    <a href="menu.html">Menu</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:18px;">
+    <a class="nav-cta" href="https://wa.me/919881217775" target="_blank">Order →</a>
+    <button id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero reveal in">
+  <div class="eyebrow-row"><span class="eyebrow">Our Story</span><span class="ln"></span></div>
+  <h1>Sixty years,<br>one recipe.</h1>
+  <p>From a small snack corner at Shivaji Chowk to Ulhasnagar's most trusted name in mithai — this is the A1 story.</p>
+</div>
+
+<section class="section" style="padding-top:0;">
+  <div class="story-layout reveal">
+    <div class="zoom-wrap" style="aspect-ratio:4/5;"><img src="posters/poster-1.jpg" alt="A1 Sweets platter" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="story-copy">
+      <p>1965 mein Madhavdas Kanayalal Jaisinghani ne Shivaji Chowk pe ek chhoti si dukaan shuru ki — daal-pakwan, bhajiya, aur shaam ko jalebi-malpua bikte the. Dheere-dheere Ulhasnagar ke swaad ne mithai ki taraf rukh kiya, aur 1988 tak A1 poori tarah ek sweet house ban chuka tha.</p>
+      <p>1994 mein unke beton ne family business aage badhaya — quality aur hygiene ko kabhi compromise nahi kiya. Aaj teesri peedhi wahi bharosa aage badha rahi hai, jisse Ulhasnagar shaadi, tyohaar aur roz ke gift hampers ke liye bharosa karta hai.</p>
+      <div class="quote-block">
+        <p>"Ek rupaya bhi sau rupaye jaisa sambhalo — paisa nahi, uski keemat badhti hai."</p>
+        <span>— A1 Sweets, on the family's business philosophy</span>
+      </div>
+      <p>Har mithai aaj bhi wahi pure ghee, wahi handpicked dry fruits, aur wahi recipe se banti hai jo saath dahaakon pehle shuru hui thi. Kuch bhi shortcut nahi liya gaya — na taste mein, na quality mein.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="eyebrow-row reveal" style="justify-content:center;"><span class="eyebrow">Timeline</span></div>
+  <h2 class="reveal" style="text-align:center;margin-bottom:60px;">Six decades,<br>three generations.</h2>
+  <div class="timeline reveal-stagger">
+    <div class="tl-row">
+      <div class="tl-year">1965</div>
+      <div><h4>The Beginning</h4><p>Madhavdas Kanayalal Jaisinghani opens a small snack corner at Shivaji Chowk, Ulhasnagar.</p></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">1988</div>
+      <div><h4>Full Transition to Mithai</h4><p>What began as a snack stall fully transforms into a dedicated sweet house.</p></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">1994</div>
+      <div><h4>Second Generation</h4><p>The founder's sons take over, expanding the range while holding the line on quality.</p></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">Today</div>
+      <div><h4>Third Generation</h4><p>5,200+ Google reviews, a 4.4★ rating, and a name Ulhasnagar has trusted for sixty years.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="eyebrow-row reveal"><span class="eyebrow">In Frame</span><span class="ln"></span></div>
+  <h2 class="reveal" style="margin-bottom:40px;">A closer look.</h2>
+  <div class="gallery reveal-stagger">
+    <div class="zoom-wrap"><img src="images/kaju-katli.jpg" alt="Kaju Katli" loading="lazy"></div>
+    <div class="zoom-wrap"><img src="images/rasmalai.jpg" alt="Rasmalai" loading="lazy"></div>
+    <div class="zoom-wrap"><img src="images/anjeer-delight.jpg" alt="Anjeer Dryfruit" loading="lazy"></div>
+    <div class="zoom-wrap"><img src="images/festival-box.jpg" alt="Festival Box" loading="lazy"></div>
+    <div class="zoom-wrap"><img src="images/wedding-hamper.jpg" alt="Wedding Hamper" loading="lazy"></div>
+    <div class="zoom-wrap"><img src="images/corporate-gift.jpg" alt="Corporate Gift" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="section reveal" style="text-align:center;">
+  <h2 style="margin-bottom:20px;">Taste the legacy<br>for yourself.</h2>
+  <p style="color:var(--gray);font-weight:300;margin-bottom:34px;">Fourteen categories, made fresh through the day.</p>
+  <a class="btn btn-dark" href="menu.html">View Full Menu</a>
+</section>
+
+<footer>
+  <span>© A1 Sweets — Ulhasnagar No. 3, Maharashtra</span>
+  <div class="f-links">
+    <a href="https://wa.me/919881217775" target="_blank">WhatsApp</a>
+    <a href="tel:+919881217775">Call</a>
+    <a href="https://www.google.com/maps/place/?q=place_id:ChIJJ5w2LxWU5zsRBWfB-OZJGVU" target="_blank">Maps</a>
+  </div>
+</footer>
+
+<button id="totop" aria-label="Back to top">↑</button>
+
+<script>
+  document.addEventListener('DOMContentLoaded', ()=>{ document.body.classList.add('loaded'); });
+
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+  burger.addEventListener('click', ()=>{
+    burger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+
+  const revealEls = document.querySelectorAll('.reveal:not(.in), .reveal-stagger');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  const totop = document.getElementById('totop');
+  window.addEventListener('scroll', ()=>{ totop.classList.toggle('show', window.scrollY > 700); });
+  totop.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+</body>
+</html>

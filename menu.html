@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Menu — A1 Sweets</title>
+<meta name="description" content="Complete price list — A1 Sweets, Ulhasnagar. Fourteen categories, made fresh daily.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23141311'/%3E%3Ctext x='50' y='62' font-family='Georgia,serif' font-size='46' fill='%23D8A857' text-anchor='middle'%3EA1%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#FAF8F3; --panel:#F2EEE3; --ink:#141311; --gray:#6B675D; --gray-dim:#C7C0AF;
+    --gold:#B8863E; --gold-bright:#D8A857; --line: rgba(20,19,17,0.13); --line-soft: rgba(20,19,17,0.07);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;
+    opacity:0;transition:opacity .6s ease;}
+  body.loaded{opacity:1;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:400;line-height:1.06;letter-spacing:-0.01em;}
+  i,em{font-style:italic;font-family:'Fraunces',serif;color:var(--gold);}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gray);}
+  a{color:inherit;text-decoration:none;}
+  section{position:relative;}
+  ::selection{background:var(--ink);color:var(--bg);}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1;transform:none;transition:none;} }
+
+  #totop{
+    position:fixed;right:22px;bottom:22px;z-index:90;
+    width:46px;height:46px;border-radius:50%;background:var(--ink);color:#F5F0E4;
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  #totop.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+
+  nav{
+    position:sticky;top:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:20px 5vw;background:rgba(250,248,243,0.88);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .logotype{font-family:'Fraunces';font-size:1.15rem;}
+  nav .nav-links{display:flex;gap:34px;font-size:0.82rem;}
+  nav .nav-links a{opacity:0.7;transition:opacity .2s;position:relative;padding-bottom:4px;}
+  nav .nav-links a.active, nav .nav-links a:hover{opacity:1;}
+  nav .nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);}
+  nav .nav-cta{background:var(--ink);color:#F5F0E4;padding:10px 22px;border-radius:100px;font-size:0.78rem;transition:transform .25s ease;}
+  nav .nav-cta:hover{transform:scale(1.04);}
+  #burger{display:none;background:none;border:none;cursor:pointer;width:26px;height:18px;position:relative;}
+  #burger span{position:absolute;left:0;right:0;height:1px;background:var(--ink);transition:transform .3s ease, opacity .3s ease;}
+  #burger span:nth-child(1){top:0;}
+  #burger span:nth-child(2){top:50%;transform:translateY(-50%);}
+  #burger span:nth-child(3){bottom:0;}
+  #burger.open span:nth-child(1){transform:translateY(8.5px) rotate(45deg);}
+  #burger.open span:nth-child(2){opacity:0;}
+  #burger.open span:nth-child(3){transform:translateY(-8.5px) rotate(-45deg);}
+  @media(max-width:760px){
+    nav .nav-links{
+      display:flex;flex-direction:column;gap:0;
+      position:fixed;top:66px;left:0;right:0;background:var(--bg);
+      border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .35s ease;
+    }
+    nav .nav-links.open{max-height:260px;}
+    nav .nav-links a{padding:16px 5vw;border-bottom:1px solid var(--line-soft);opacity:1;font-size:0.95rem;}
+    nav .nav-links a.active::after{display:none;}
+    nav .nav-links a.active{color:var(--gold);}
+    #burger{display:block;}
+  }
+
+  /* mobile category strip (replaces hidden sidebar) */
+  .cat-strip{display:none;}
+  @media(max-width:900px){
+    .cat-strip{
+      display:flex;gap:8px;overflow-x:auto;padding:4px 6vw 18px;
+      position:sticky;top:65px;z-index:50;background:var(--bg);
+      border-bottom:1px solid var(--line);
+    }
+    .cat-strip::-webkit-scrollbar{display:none;}
+    .cat-strip button{
+      flex:none;padding:8px 16px;border-radius:100px;border:1px solid var(--line);
+      background:none;font-family:'IBM Plex Mono';font-size:0.65rem;color:var(--gray);white-space:nowrap;
+    }
+    .cat-strip button.active{background:var(--ink);color:#F5F0E4;border-color:var(--ink);}
+  }
+</style>
+
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:100px;font-size:0.82rem;font-weight:500;transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;}
+  .btn-dark{background:var(--ink);color:#F5F0E4;}
+  .btn-dark:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,19,17,0.18);}
+
+  .eyebrow-row{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+  .eyebrow-row .ln{width:34px;height:1px;background:var(--line);}
+
+  .page-hero{padding:90px 6vw 50px;max-width:720px;}
+  .page-hero h1{font-size:clamp(2.6rem,6vw,4.6rem);}
+  .page-hero p{margin-top:18px;font-size:0.95rem;font-weight:300;color:var(--gray);max-width:460px;}
+
+  .menu-wrap{padding:0 6vw 140px;}
+  .menu-layout{display:grid;grid-template-columns:210px 1fr;gap:60px;align-items:start;}
+  @media(max-width:900px){.menu-layout{grid-template-columns:1fr;}}
+  .menu-sidebar{position:sticky;top:90px;display:flex;flex-direction:column;gap:13px;max-height:80vh;overflow-y:auto;}
+  @media(max-width:900px){.menu-sidebar{display:none;}}
+  .menu-sidebar button{
+    text-align:left;background:none;border:none;cursor:pointer;
+    font-family:'IBM Plex Mono';font-size:0.66rem;letter-spacing:1px;
+    color:var(--gray-dim);padding:4px 0;transition:color .25s ease;
+  }
+  .menu-sidebar button.active{color:var(--ink);}
+
+  .menu-cat-block{position:relative;padding-top:64px;border-top:1px solid var(--line);}
+  .menu-cat-block:first-child{padding-top:0;border-top:none;}
+  .menu-cat-block .cat-watermark{
+    position:absolute;top:2px;right:0;font-family:'IBM Plex Mono';font-size:0.85rem;color:var(--gray-dim);letter-spacing:1px;
+  }
+  .menu-cat-block h3{font-size:clamp(1.6rem,2.8vw,2.2rem);margin-bottom:6px;}
+  .menu-cat-block .cat-desc{font-family:'Fraunces';font-style:italic;color:var(--gold);font-size:0.88rem;margin-bottom:30px;}
+  .menu-row{display:flex;align-items:baseline;gap:16px;padding:16px 10px;border-bottom:1px solid var(--line-soft);border-radius:8px;transition:background .25s ease, padding-left .25s ease;}
+  .menu-row:hover{background:rgba(184,134,62,0.06);padding-left:16px;}
+  .menu-row .m-left{flex:1;}
+  .menu-row h4{font-family:'Fraunces';font-weight:400;font-size:1.1rem;}
+  .menu-row .m-note{font-family:'IBM Plex Mono';font-size:0.62rem;color:var(--gray-dim);margin-top:4px;letter-spacing:0.5px;}
+  .menu-row .m-desc{font-size:0.77rem;color:var(--gray);margin-top:3px;font-weight:300;}
+  .menu-row .m-right{text-align:right;white-space:nowrap;}
+  .menu-row .m-price{font-family:'IBM Plex Mono';font-size:0.9rem;color:var(--gold);}
+  .menu-row .m-unit{display:block;font-size:0.6rem;color:var(--gray-dim);margin-top:2px;}
+
+  footer{
+    background:var(--ink);color:rgba(245,240,228,0.6);
+    padding:30px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+    font-family:'IBM Plex Mono';font-size:0.66rem;letter-spacing:1px;
+  }
+  footer .f-links{display:flex;gap:22px;flex-wrap:wrap;}
+  footer .f-links a{color:rgba(245,240,228,0.85);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logotype">A1 Sweets</div>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Home</a>
+    <a href="story.html">Story</a>
+    <a href="menu.html" class="active">Menu</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:18px;">
+    <a class="nav-cta" href="https://wa.me/919881217775" target="_blank">Order →</a>
+    <button id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero reveal in">
+  <div class="eyebrow-row"><span class="eyebrow">Full Menu</span><span class="ln"></span></div>
+  <h1>Everything<br>we make.</h1>
+  <p>Official price list — fourteen categories, made fresh through the day. All rates in ₹, per kg unless noted.</p>
+</div>
+
+<div class="cat-strip" id="cat-strip"></div>
+
+<div class="menu-wrap">
+  <div class="menu-layout">
+    <div class="menu-sidebar" id="menu-sidebar"></div>
+    <div id="menu-catalogue"></div>
+  </div>
+</div>
+
+<section style="padding:0 6vw 120px;text-align:center;">
+  <a class="btn btn-dark" href="https://wa.me/919881217775" target="_blank">Order via WhatsApp</a>
+</section>
+
+<footer>
+  <span>© A1 Sweets — Ulhasnagar No. 3, Maharashtra</span>
+  <div class="f-links">
+    <a href="https://wa.me/919881217775" target="_blank">WhatsApp</a>
+    <a href="tel:+919881217775">Call</a>
+    <a href="https://www.google.com/maps/place/?q=place_id:ChIJJ5w2LxWU5zsRBWfB-OZJGVU" target="_blank">Maps</a>
+  </div>
+</footer>
+
+<button id="totop" aria-label="Back to top">↑</button>
+
+<script>
+  const MENU_DATA = [
+    { cat:"All-Time Sweets", items:[
+      {n:"Gulab Jamun", r:15, u:"per piece"},
+      {n:"Black Jamun", r:20, u:"per piece"},
+      {n:"Balushahi Desi Ghee", r:480, u:"per kg", note:"Best within 3 days"},
+      {n:"Mysore Pak", r:360, u:"per kg", note:"Best within 2 days"},
+      {n:"Tosha", r:340, u:"per kg", note:"Best within 3 days"},
+      {n:"Malpoha", r:360, u:"per kg", note:"Best within 2 days"},
+      {n:"Tikky Khaja", r:360, u:"per kg", note:"Best within 3 days"},
+      {n:"Piss (Kharwas)", r:360, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Sonwada (Desi Ghee)", r:460, u:"per kg", note:"Best within 7 days"},
+      {n:"Rabdi", r:640, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Malai Mysore Pak", r:720, u:"per kg", note:"Best within 3 days"},
+      {n:"Kaju Kofta", r:900, u:"per kg", note:"Best within 4 days"},
+      {n:"Biscoff Kaju Bite", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Double Decker Sev Mithai", r:440, u:"per kg", note:"Best within 2 days"},
+      {n:"Plain Sev Mithai", r:360, u:"per kg", note:"Best within 2 days"}
+    ]},
+    { cat:"Peda", items:[
+      {n:"Doodh Peda", r:600, u:"per kg", note:"Best within 2 days"},
+      {n:"Rabdi Peda", r:640, u:"per kg", note:"Best within 2 days"},
+      {n:"Kandhi Peda", r:640, u:"per kg", note:"Best within 3 days"},
+      {n:"Kesar Peda", r:680, u:"per kg", note:"Best within 2 days"},
+      {n:"Bhugal Peda", r:640, u:"per kg", note:"Best within 2 days"}
+    ]},
+    { cat:"Mawa Barfi", items:[
+      {n:"Malai Barfi (Kalakand)", r:600, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Bhugal Mawa", r:600, u:"per kg", note:"Best within 2 days"},
+      {n:"Milk Cake", r:620, u:"per kg", note:"Best within 2 days"},
+      {n:"Anjeer Barfi", r:640, u:"per kg", note:"Best within 2 days"},
+      {n:"Rajwadi Barfi", r:800, u:"per kg", note:"Best within 2 days"},
+      {n:"Walnut Milkcake", r:820, u:"per kg", note:"Best within 2 days"},
+      {n:"Red Velvet Cheese Barfi", r:940, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Dryfruit Bhugal Barfi", r:640, u:"per kg", note:"Best within 2 days"},
+      {n:"Mango Barfi", r:640, u:"per kg", note:"Best within 24 hrs"}
+    ]},
+    { cat:"Barfi", items:[
+      {n:"Nariyal Barfi", r:620, u:"per kg", note:"Best within 2 days"},
+      {n:"Badaam Roll", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Choco Ice Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Falooda Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Watermelon Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Half Round Barfi", r:660, u:"per kg", note:"Best within 2 days"},
+      {n:"Kaju Casata", r:700, u:"per kg", note:"Best within 2 days"},
+      {n:"Kaju Sangam Barfi", r:820, u:"per kg", note:"Best within 2 days"}
+    ]},
+    { cat:"Laddoo", items:[
+      {n:"Plain Churi Laddoo", r:340, u:"per kg", note:"Best within 15 days"},
+      {n:"Spl Churi Laddoo", r:440, u:"per kg", d:"Kaju & Badaam", note:"Best within 15 days"},
+      {n:"Double Churi Spl Ladoo", r:540, u:"per kg", note:"Best within 15 days"},
+      {n:"Pista Churi Laddoo", r:680, u:"per kg", d:"Desi ghee, kaju, badam & pista — made to order", note:"Best within 15 days"},
+      {n:"Motichoor Laddoo", r:400, u:"per kg", note:"Best within 2 days"},
+      {n:"Boondi Laddoo", r:400, u:"per kg", note:"Best within 2 days"},
+      {n:"Desi Ghee Motichoor Laddoo", r:600, u:"per kg", note:"Best within 2 days"},
+      {n:"Nariyal Laddoo", r:560, u:"per kg", note:"Best within 2 days"},
+      {n:"Desi Ghee Besan Laddoo", r:580, u:"per kg", note:"Best within 12 days"},
+      {n:"Methi Laddoo", r:600, u:"per kg", note:"Best within 15 days"},
+      {n:"Protein Laddoo", r:600, u:"per kg", note:"Best within 15 days"},
+      {n:"Sugarless Dryfruit Laddoo (Honey)", r:1180, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Sev Mithai", items:[
+      {n:"Plain Sev Mithai", r:360, u:"per kg", note:"Best within 2 days"},
+      {n:"Double Decker Sev Mithai", r:440, u:"per kg", note:"Best within 2 days"},
+      {n:"Bhugal Double Decker Sev Mithai", r:440, u:"per kg", note:"Best within 2 days"},
+      {n:"Spl Sev Mithai", r:500, u:"per kg", note:"Best within 24 hrs"},
+      {n:"Desi Ghee Sev Mithai", r:700, u:"per kg", note:"Best within 24 hrs"}
+    ]},
+    { cat:"Bengali Sweets", items:[
+      {n:"Rasgulla", r:20, u:"per piece", note:"Same day fresh"},
+      {n:"Rasmalai", r:35, u:"per piece", note:"Same day fresh"},
+      {n:"Malai Sandwich", r:40, u:"per piece", note:"Same day fresh"},
+      {n:"Rajbhog", r:40, u:"per piece", note:"Same day fresh"},
+      {n:"ChumChum", r:45, u:"per piece", note:"Same day fresh"},
+      {n:"Angoori Rasmalai", r:620, u:"per kg", note:"Same day fresh"},
+      {n:"Jumbo Malai Sandwich", r:45, u:"per piece", note:"Same day fresh"},
+      {n:"Half Round Sandwich", r:40, u:"per piece", note:"Same day fresh"}
+    ]},
+    { cat:"Premium Crunch Sweets", items:[
+      {n:"Bourbon Crunch", r:1100, u:"per kg", note:"Best within 7 days"},
+      {n:"Mango Crunch", r:1100, u:"per kg", note:"Best within 7 days"},
+      {n:"Oreo Crunch", r:1100, u:"per kg", note:"Best within 7 days"},
+      {n:"Hazelnut Crunch", r:1280, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Premium Mewa Sweets", items:[
+      {n:"Mewa Bites", r:1120, u:"per kg", note:"Best within 5 days"},
+      {n:"Mewa Bites (Rose)", r:1120, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Premium Kaju Sweets", items:[
+      {n:"Kaju Katli", r:1100, u:"per kg", note:"Best within 5 days"},
+      {n:"Kesar Kaju Katli", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Black Current Kaju Katli", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Biscoff Kaju Bite", r:1360, u:"per kg", note:"Best within 7 days"},
+      {n:"Kaju Pan", r:1260, u:"per kg", note:"Best within 7 days"},
+      {n:"Kaju Pista Rolls", r:1260, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Premium Sweets", d:"Low Calorie Range", items:[
+      {n:"Khajoor Dryfruit", r:1280, u:"per kg", note:"Best within 15 days"},
+      {n:"Anjeer Dryfruit", r:1380, u:"per kg", note:"Best within 15 days"},
+      {n:"Gulkand Dryfruit", r:1280, u:"per kg", note:"Best within 15 days"},
+      {n:"Honey Dryfruit", r:1280, u:"per kg", note:"Best within 10 days"},
+      {n:"Roasted Rose Pak", r:1280, u:"per kg", note:"Best within 10 days"},
+      {n:"Blueberry Delight", r:1540, u:"per kg", note:"Best within 15 days"},
+      {n:"Cranberry Delight", r:1440, u:"per kg", note:"Best within 15 days"},
+      {n:"Gulkand Mithai", r:1080, u:"per kg", note:"Best within 15 days"}
+    ]},
+    { cat:"Baklawa", items:[
+      {n:"Walnut Baklawa", r:1300, u:"per kg", note:"Best within 7 days"},
+      {n:"Dryfruit Tart", r:1560, u:"per kg", note:"Best within 7 days"},
+      {n:"Dryfruit Pyramid", r:1100, u:"per kg", note:"Best within 7 days"}
+    ]},
+    { cat:"Chikki", items:[
+      {n:"Kaju Chikki", r:1040, u:"per kg", note:"Best within 7 days"},
+      {n:"Kaju Chikki", r:260, u:"1 pc · 250g", note:"Best within 7 days"},
+      {n:"Dryfruit Chikki", r:1040, u:"per kg", note:"Best within 7 days"},
+      {n:"Dryfruit Chikki", r:260, u:"1 piece", note:"Best within 7 days"}
+    ]},
+    { cat:"Halwa", items:[
+      {n:"Green Kaju Halwa", r:300, u:"per kg", note:"Best within 15 days"},
+      {n:"Orange Badam Halwa", r:360, u:"per kg", note:"Best within 15 days"},
+      {n:"Desi Ghee Mahim Halwa", r:740, u:"per kg", note:"Best within 15 days"},
+      {n:"Mix Dryfruit Halwa", r:740, u:"per kg", note:"Best within 15 days"},
+      {n:"Shahi Pista Halwa", r:1200, u:"per kg", note:"Best within 15 days"}
+    ]}
+  ];
+
+  const sidebar = document.getElementById('menu-sidebar');
+  const catStrip = document.getElementById('cat-strip');
+  const catalogue = document.getElementById('menu-catalogue');
+
+  MENU_DATA.forEach((group, i)=>{
+    const num = String(i+1).padStart(2,'0');
+
+    const sideBtn = document.createElement('button');
+    sideBtn.textContent = group.cat;
+    sideBtn.dataset.idx = i;
+    sideBtn.addEventListener('click', ()=>{
+      document.getElementById('cat-'+i).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    sidebar.appendChild(sideBtn);
+
+    const stripBtn = document.createElement('button');
+    stripBtn.textContent = group.cat;
+    stripBtn.dataset.idx = i;
+    stripBtn.addEventListener('click', ()=>{
+      document.getElementById('cat-'+i).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    catStrip.appendChild(stripBtn);
+
+    const block = document.createElement('div');
+    block.className = 'menu-cat-block reveal';
+    block.id = 'cat-'+i;
+    block.innerHTML = `
+      <div class="cat-watermark">${num} / ${String(MENU_DATA.length).padStart(2,'0')}</div>
+      <h3>${group.cat}</h3>
+      ${group.d ? `<div class="cat-desc"><i>${group.d}</i></div>` : ''}
+      ${group.items.map(item=>`
+        <div class="menu-row">
+          <div class="m-left">
+            <h4>${item.n}</h4>
+            ${item.d ? `<div class="m-desc">${item.d}</div>` : ''}
+            ${item.note ? `<div class="m-note">${item.note}</div>` : ''}
+          </div>
+          <div class="m-right">
+            <span class="m-price">₹${item.r}</span>
+            <span class="m-unit">${item.u}</span>
+          </div>
+        </div>
+      `).join('')}
+    `;
+    catalogue.appendChild(block);
+  });
+
+  const blocks = document.querySelectorAll('.menu-cat-block');
+  const sideBtns = sidebar.querySelectorAll('button');
+  const stripBtns = catStrip.querySelectorAll('button');
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const idx = entry.target.id.split('-')[1];
+        sideBtns.forEach(b=>b.classList.toggle('active', b.dataset.idx === idx));
+        stripBtns.forEach(b=>b.classList.toggle('active', b.dataset.idx === idx));
+      }
+      if(entry.isIntersecting) entry.target.classList.add('in');
+    });
+  }, {rootMargin:'-20% 0px -70% 0px'});
+  blocks.forEach(b=>spy.observe(b));
+
+  document.addEventListener('DOMContentLoaded', ()=>{ document.body.classList.add('loaded'); });
+
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+  burger.addEventListener('click', ()=>{
+    burger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+
+  const totop = document.getElementById('totop');
+  window.addEventListener('scroll', ()=>{ totop.classList.toggle('show', window.scrollY > 700); });
+  totop.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+</body>
+</html>
