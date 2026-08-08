@@ -86,8 +86,6 @@
     }
     .cat-strip button.active{background:var(--ink);color:#F5F0E4;border-color:var(--ink);}
   }
-</style>
-
 
   .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:100px;font-size:0.82rem;font-weight:500;transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;}
   .btn-dark{background:var(--ink);color:#F5F0E4;}
@@ -375,14 +373,4 @@
 
   const burger = document.getElementById('burger');
   const navLinks = document.getElementById('nav-links');
-  burger.addEventListener('click', ()=>{
-    burger.classList.toggle('open');
-    navLinks.classList.toggle('open');
-  });
-
-  const totop = document.getElementById('totop');
-  window.addEventListener('scroll', ()=>{ totop.classList.toggle('show', window.scrollY > 700); });
-  totop.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
-</script>
-</body>
-</html>
+  burger.addEventListener('c
