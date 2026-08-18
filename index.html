@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#9C1B22">
+  <meta name="description" content="A1 Sweets, Ulhasnagar No. 3. Family-run Indian sweets shop since 1965. Order your favourite mithai on WhatsApp.">
+  <title>A1 Sweets | Since 1965 | Ulhasnagar No. 3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="A1 Sweets home">
+        <span class="brand-mark" aria-hidden="true">A1</span>
+        <span>
+          <strong>A1 Sweets</strong>
+          <small>Since 1965 · Ulhasnagar</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <a class="active" href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="story.html">Our Story</a>
+        <a href="#visit">Visit Us</a>
+        <a class="nav-order" href="https://wa.me/919881217775?text=Hello%20A1%20Sweets%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">WhatsApp Order</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero section-pad">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Since 1965 · 3rd Generation</div>
+          <h1>Some traditions are meant to be <em>shared.</em></h1>
+          <p class="hero-lead">Handpicked mithai, familiar favourites and festive gifting from a family-run sweet shop in the heart of Ulhasnagar.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="menu.html">Explore the Menu <span aria-hidden="true">→</span></a>
+            <a class="btn btn-secondary" href="https://wa.me/919881217775?text=Hello%20A1%20Sweets%2C%20I%20would%20like%20to%20order." target="_blank" rel="noopener">Order on WhatsApp</a>
+          </div>
+          <div class="hero-meta">
+            <span><strong>4.4★</strong> rated</span>
+            <span>5,200+ Google reviews</span>
+            <span>Open daily · 10 AM–10 PM</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="A1 Sweets signature gift box visual">
+          <div class="hero-glow"></div>
+          <div class="hero-orbit hero-orbit-one"></div>
+          <div class="hero-orbit hero-orbit-two"></div>
+          <div class="sweet-box" id="sweetBox">
+            <div class="box-lid">
+              <span class="mini-brand">A1</span>
+              <span class="lid-script">Sweets</span>
+            </div>
+            <div class="box-face">
+              <div class="box-medallion">1965</div>
+              <div class="box-title">A1 Sweets</div>
+              <div class="box-subtitle">Made to be shared</div>
+              <div class="box-pattern" aria-hidden="true">✦ · ✦ · ✦</div>
+            </div>
+            <div class="box-shadow"></div>
+          </div>
+          <span class="floating-spark spark-one" aria-hidden="true">✦</span>
+          <span class="floating-spark spark-two" aria-hidden="true">✦</span>
+          <span class="floating-spark spark-three" aria-hidden="true">✦</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip">
+      <div class="container trust-grid">
+        <div class="trust-item"><span class="trust-icon">✦</span><div><strong>Pure Ghee</strong><small>Selected recipes</small></div></div>
+        <div class="trust-item"><span class="trust-icon">◌</span><div><strong>Fresh Daily</strong><small>Made for the day</small></div></div>
+        <div class="trust-item"><span class="trust-icon">1965</span><div><strong>Since 1965</strong><small>Three generations</small></div></div>
+        <div class="trust-item"><span class="trust-icon">★</span><div><strong>4.4★ Rated</strong><small>5,200+ reviews</small></div></div>
+      </div>
+    </section>
+
+    <section class="section-pad">
+      <div class="container">
+        <div class="section-heading-row">
+          <div>
+            <span class="section-kicker">Most loved</span>
+            <h2>People come back for these.</h2>
+            <p>Keep your favourites close. Add the exact price list in <code>assets/products.js</code> and these cards update automatically.</p>
+          </div>
+          <a class="text-link desktop-only" href="menu.html">View full menu <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="product-grid product-grid-home" id="bestseller-grid" data-home-bestsellers="6"></div>
+      </div>
+    </section>
+
+    <section class="section-pad section-cream">
+      <div class="container">
+        <div class="section-heading-row">
+          <div>
+            <span class="section-kicker">Shop by category</span>
+            <h2>Something for every craving.</h2>
+          </div>
+          <a class="text-link desktop-only" href="menu.html">See all categories <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="category-grid" id="category-grid"></div>
+      </div>
+    </section>
+
+    <section class="section-pad">
+      <div class="container story-teaser">
+        <div class="story-photo-placeholder">
+          <div class="story-photo-inner">
+            <span class="story-year">1965</span>
+            <strong>Three generations.<br>One sweet tradition.</strong>
+            <small>Replace this panel with your original family/shop photograph.</small>
+          </div>
+        </div>
+        <div class="story-copy">
+          <span class="section-kicker">Our story</span>
+          <h2>A shop built on familiar faces and familiar flavours.</h2>
+          <p>What began in 1965 continues today with the third generation carrying forward the everyday mithai, festive favourites and warm neighbourhood service that A1 Sweets is known for.</p>
+          <div class="story-facts">
+            <div><strong>1965</strong><span>Founded</span></div>
+            <div><strong>3rd</strong><span>Generation</span></div>
+            <div><strong>4.4★</strong><span>Google rating</span></div>
+          </div>
+          <a class="btn btn-secondary" href="story.html">Read our story</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="gifting-banner">
+      <div class="container gifting-inner">
+        <div>
+          <span class="section-kicker section-kicker-light">Made for moments</span>
+          <h2>Festivals, family visits, office treats.<br><em>Bring a box of something good.</em></h2>
+        </div>
+        <a class="btn btn-light" href="https://wa.me/919881217775?text=Hello%20A1%20Sweets%2C%20I%20need%20help%20with%20a%20gift%2Fbulk%20sweet%20order." target="_blank" rel="noopener">Ask about gifting</a>
+      </div>
+    </section>
+
+    <section class="section-pad reviews-section">
+      <div class="container">
+        <div class="section-heading centered">
+          <span class="section-kicker">Neighbourhood love</span>
+          <h2>Good sweets. Good memories.</h2>
+          <p>A clean space for your real Google review highlights. Replace the sample copy below with verified customer reviews.</p>
+        </div>
+        <div class="review-grid">
+          <article class="review-card"><div class="review-stars">★★★★★</div><p>“Replace this line with a real Google review highlighting taste, freshness or service.”</p><strong>Verified customer</strong><small>Google review</small></article>
+          <article class="review-card"><div class="review-stars">★★★★★</div><p>“Replace this with a review about family visits, festivals or a favourite mithai.”</p><strong>Verified customer</strong><small>Google review</small></article>
+          <article class="review-card"><div class="review-stars">★★★★★</div><p>“Use a real review here rather than invented testimonials.”</p><strong>Verified customer</strong><small>Google review</small></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad section-cream" id="visit">
+      <div class="container visit-grid">
+        <div>
+          <span class="section-kicker">Come say hello</span>
+          <h2>Find us in Ulhasnagar No. 3.</h2>
+          <p class="visit-address">Shop 718/719, Kalyan-Ambernath Road,<br>Near Shivaji Chowk, Ulhasnagar No. 3,<br>Maharashtra, India.</p>
+          <div class="visit-details">
+            <div><span>Hours</span><strong>Daily · 10 AM – 10 PM</strong></div>
+            <div><span>Phone / WhatsApp</span><a href="tel:+919881217775">+91 98812 17775</a></div>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=A1%20Sweets%2C%20Shop%20718%2F719%2C%20Kalyan-Ambernath%20Road%2C%20Ulhasnagar%20No.%203%2C%20Maharashtra" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+            <a class="btn btn-secondary" href="https://wa.me/919881217775?text=Hello%20A1%20Sweets%2C%20I%20am%20on%20my%20way%20to%20the%20shop." target="_blank" rel="noopener">Message us</a>
+          </div>
+        </div>
+        <div class="map-card" aria-label="Map location preview">
+          <div class="map-card-top"><span class="map-pin">●</span><span>A1 Sweets</span><small>Ulhasnagar No. 3</small></div>
+          <div class="map-art" aria-hidden="true">
+            <div class="map-road road-a"></div><div class="map-road road-b"></div><div class="map-road road-c"></div>
+            <div class="map-block block-a"></div><div class="map-block block-b"></div><div class="map-block block-c"></div>
+            <div class="map-marker" aria-label="A1 Sweets map marker"></div>
+          </div>
+          <div class="map-note">Map preview is intentionally lightweight. Use the button above for live directions.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><a class="brand brand-footer" href="index.html"><span class="brand-mark">A1</span><span><strong>A1 Sweets</strong><small>Since 1965</small></span></a><p>Family-run Indian sweets in Ulhasnagar No. 3, Maharashtra.</p></div>
+      <div><h3>Explore</h3><a href="menu.html">Full Menu</a><a href="story.html">Our Story</a><a href="#visit">Visit Us</a></div>
+      <div><h3>Order</h3><a href="https://wa.me/919881217775?text=Hello%20A1%20Sweets%2C%20I%20would%20like%20to%20order." target="_blank" rel="noopener">WhatsApp</a><a href="tel:+919881217775">Call +91 98812 17775</a><span>Daily · 10 AM–10 PM</span></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span id="year"></span> A1 Sweets. All rights reserved.</span><span>Built as a lightweight static site.</span></div>
+  </footer>
+
+  <script src="assets/products.js"></script>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

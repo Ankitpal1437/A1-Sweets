@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#9C1B22">
+  <meta name="description" content="A1 Sweets full mithai menu. Choose an item and order directly on WhatsApp.">
+  <title>Menu | A1 Sweets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="A1 Sweets home"><span class="brand-mark">A1</span><span><strong>A1 Sweets</strong><small>Since 1965 · Ulhasnagar</small></span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation"><span></span><span></span><span></span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation"><a href="index.html">Home</a><a class="active" href="menu.html">Menu</a><a href="story.html">Our Story</a><a href="index.html#visit">Visit Us</a><a class="nav-order" href="https://wa.me/919881217775?text=Hello%20A1%20Sweets%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">WhatsApp Order</a></nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero section-pad">
+      <div class="container page-hero-inner">
+        <div><span class="section-kicker">14 categories · ~80 items</span><h1>Our Menu</h1><p>Choose what you love, then send the item straight to A1 Sweets on WhatsApp. Prices shown here come from your editable product data file.</p></div>
+        <div class="page-hero-badge"><strong>10 AM–10 PM</strong><span>Open daily</span></div>
+      </div>
+    </section>
+
+    <section class="menu-tools section-pad-small">
+      <div class="container menu-tools-inner">
+        <div class="category-tabs" id="category-tabs" role="tablist" aria-label="Menu categories"></div>
+        <label class="menu-search"><span class="sr-only">Search menu</span><input id="menu-search" type="search" placeholder="Search sweets, namkeen, gift boxes…" autocomplete="off"><span aria-hidden="true">⌕</span></label>
+      </div>
+    </section>
+
+    <section class="section-pad menu-section">
+      <div class="container">
+        <div class="menu-status" id="menu-status" aria-live="polite"></div>
+        <div class="menu-groups" id="menu-groups"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><a class="brand brand-footer" href="index.html"><span class="brand-mark">A1</span><span><strong>A1 Sweets</strong><small>Since 1965</small></span></a><p>Family-run Indian sweets in Ulhasnagar No. 3, Maharashtra.</p></div>
+      <div><h3>Explore</h3><a href="index.html">Home</a><a href="story.html">Our Story</a><a href="index.html#visit">Visit Us</a></div>
+      <div><h3>Order</h3><a href="https://wa.me/919881217775?text=Hello%20A1%20Sweets%2C%20I%20would%20like%20to%20order." target="_blank" rel="noopener">WhatsApp</a><a href="tel:+919881217775">Call +91 98812 17775</a><span>Daily · 10 AM–10 PM</span></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span id="year"></span> A1 Sweets. All rights reserved.</span><span>Static · lightweight · mobile-first</span></div>
+  </footer>
+  <script src="assets/products.js"></script>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>
